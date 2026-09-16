@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load shipping_extras %}
+{% load humanize %}
+
+{% block content %}
+<div>
+  <div class="mb-8">
+    <h1 class="text-2xl lg:text-3xl font-display font-bold text-white">
+      Welcome back{% if user.first_name %}, <span class="text-cargo-gradient">{{ user.first_name }}</span>{% endif %}.
+    </h1>
+    <p class="text-sm text-white/40 mt-1">Here's what's moving through your network today.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="rounded-2xl p-5 lg:p-6 text-ink-950 bg-gradient-to-br from-cargo-400 to-cargo-600 shadow-lg shadow-cargo-500/10">
+      <div class="w-10 h-10 rounded-xl bg-black/10 flex items-center justify-center mb-4"><i class="fas fa-boxes-stacked"></i></div>
+      <p class="text-xs font-semibold opacity-70 mb-1">Active Shipments</p>
+      <h3 class="text-2xl lg:text-3xl font-display font-bold">{{ active_count }}</h3>
+    </div>
+    <div class="rounded-2xl p-5 lg:p-6 glass">
+      <div class="w-10 h-10 rounded-xl bg-sky-500/15 flex items-center justify-center mb-4"><i class="fas fa-truck-fast text-sky-400"></i></div>
+      <p class="text-xs font-semibold text-white/40 mb-1">In Transit</p>
+      <h3 class="text-2xl lg:text-3xl font-display font-bold text-white">{{ in_transit }}</h3>
+    </div>
+    <div class="rounded-2xl p-5 lg:p-6 glass">
+      <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-4"><i class="fas fa-circle-check text-emerald-400"></i></div>
+      <p class="text-xs font-semibold text-white/40 mb-1">Delivered</p>
+      <h3 class="text-2xl lg:text-3xl font-display font-bold text-white">{{ delivered_count }}</h3>
+    </div>
+    <div class="rounded-2xl p-5 lg:p-6 glass">
+      <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center mb-4"><i class="fas fa-sack-dollar text-violet-400"></i></div>
+      <p class="text-xs font-semibold text-white/40 mb-1">Total Spent</p>
+      <h3 class="text-xl lg:text-2xl font-display font-bold text-white">${{ total_spent|floatformat:2|intcomma }}</h3>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="glass rounded-2xl p-5 lg:p-6 mb-8">
+    <h2 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Quick Actions</h2>
+    <div class="grid grid-cols-3 gap-3">
+      <a href="{% url 'track' %}" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-sky-500/20 to-sky-700/10 group-hover:scale-110 transition-transform"><i class="fas fa-location-crosshairs text-sky-400"></i></div>
+        <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">Track</span>
+      </a>
+      <a href="{% url 'address_add' %}" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-violet-500/20 to-violet-700/10 group-hover:scale-110 transition-transform"><i class="fas fa-address-book text-violet-400"></i></div>
+        <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">Add Address</span>
+      </a>
+      <a href="{% url 'support_ticket_create' %}" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-white/10 to-white/5 group-hover:scale-110 transition-transform"><i class="fas fa-headset text-white/60"></i></div>
+        <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">Support</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- SHIPMENTS -->
+    <div class="lg:col-span-2 glass rounded-2xl">
+      <div class="p-5 lg:p-6 border-b border-white/8 flex items-center justify-between">
+        <h2 class="text-lg font-bold text-white">My Shipments</h2>
+        <a href="{% url 'shipment_list' %}" class="text-sm text-cargo-400 hover:text-cargo-300 font-semibold">View all <i class="fas fa-arrow-right ml-1"></i></a>
+      </div>
+      <div class="p-5 lg:p-6">
+        {% if shipments %}
+        <div class="space-y-3">
+          {% for shipment in shipments %}
+          <a href="{% url 'shipment_detail' shipment.tracking_number %}" class="block group">
+            <div class="p-4 rounded-xl border border-white/8 hover:border-cargo-500/30 hover:bg-white/[0.03] transition-all">
+              <div class="flex items-center justify-between mb-3 gap-2">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-cargo-500/20 to-cargo-700/10">
+                    <i class="fas {{ shipment.service_type|service_icon }} text-cargo-400"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-white text-sm font-mono truncate">{{ shipment.tracking_number }}</p>
+                    <p class="text-xs text-white/40 truncate">{{ shipment.recipient_city }}, {{ shipment.recipient_country }}</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border flex-shrink-0 {{ shipment.status|status_badge }}">{{ shipment.get_status_display }}</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-cargo-500 to-cargo-300" style="width:{{ shipment.progress_percent }}%"></div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+          <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4"><i class="fas fa-box-open text-white/25 text-2xl"></i></div>
+          <p class="text-white/50 mb-1">No shipments yet</p>
+          <p class="text-white/30 text-sm mb-4">Shipments are booked by our team on your behalf.</p>
+          <a href="{% url 'contact' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500"><i class="fas fa-headset mr-2"></i>Contact Us to Book</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="glass rounded-2xl">
+      <div class="p-5 lg:p-6 border-b border-white/8 flex items-center justify-between">
+        <h2 class="text-lg font-bold text-white">Recent Activity</h2>
+      </div>
+      <div class="divide-y divide-white/5">
+        {% if recent_events %}
+        {% for event in recent_events %}
+        <a href="{% url 'shipment_detail' event.shipment.tracking_number %}" class="block p-4 lg:p-5 hover:bg-white/[0.03] transition-colors">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center border flex-shrink-0 {{ event.status|status_badge }}"><i class="fas {{ event.status|status_icon }} text-[10px]"></i></div>
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-white truncate">{{ event.get_status_display }}</p>
+              <p class="text-xs text-white/40 truncate">{{ event.shipment.tracking_number }} &middot; {{ event.location }}</p>
+              <p class="text-[11px] text-white/25 mt-0.5">{{ event.timestamp|naturaltime }}</p>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+        {% else %}
+        <div class="p-8 text-center">
+          <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-3"><i class="fas fa-bell text-white/25"></i></div>
+          <p class="text-white/40 text-sm">No activity yet</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

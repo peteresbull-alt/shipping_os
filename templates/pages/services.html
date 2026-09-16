@@ -1,0 +1,122 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>Services · Fracht Express</title>
+    <style>
+      .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
+      .bg-mid { background: #070B15; }
+      .bg-alt { background: #0A0F1C; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+    {% include 'partials/public_nav.html' with active='services' %}
+
+    <!-- HERO -->
+    <section class="relative hero-bg pt-32 pb-16 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="max-w-4xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">What We Move</p>
+        <h1 class="text-5xl lg:text-7xl font-display font-bold leading-[1.02] mb-6 reveal delay-100">
+          Every mode of freight,<span class="block text-cargo-gradient">one seamless platform.</span>
+        </h1>
+        <p class="text-lg text-white/45 leading-relaxed max-w-2xl mx-auto reveal delay-200">
+          From a single parcel to a full container load — book, pay and track it all from one dashboard.
+        </p>
+      </div>
+    </section>
+
+    <!-- SERVICES DETAIL -->
+    <section class="py-16 lg:py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1100px] mx-auto space-y-6">
+
+        <div class="glass rounded-3xl p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center reveal">
+          <div class="lg:col-span-2">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-plane text-cargo-400 text-lg"></i></div>
+            <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3">Express Air Freight</h2>
+            <p class="text-white/45 leading-relaxed mb-5">Door-to-door in as little as 48 hours. Priority handling for time-critical cargo, anywhere on the globe — with dedicated capacity on our partner carrier network so your shipment doesn't wait for the next available slot.</p>
+            <ul class="grid sm:grid-cols-2 gap-2.5 text-sm text-white/50">
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i>2-day average transit</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i>Priority customs lane</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i>Live checkpoint tracking</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i>Ideal for parcels &amp; documents</li>
+            </ul>
+          </div>
+          <div class="glass rounded-2xl p-6 text-center" style="background:rgba(245,158,11,0.06);">
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
+            <p class="text-4xl font-display font-bold text-cargo-gradient mb-1">$28<span class="text-base text-white/40">+ base</span></p>
+            <p class="text-xs text-white/35">plus $5.20/kg chargeable weight</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center reveal delay-100">
+          <div class="lg:col-span-2">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-ship text-sky-400 text-lg"></i></div>
+            <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3">Ocean Freight</h2>
+            <p class="text-white/45 leading-relaxed mb-5">FCL and LCL container shipping for high-volume, cost-efficient global trade. Consolidated loads reduce per-unit cost while keeping full visibility on vessel schedules and port handling.</p>
+            <ul class="grid sm:grid-cols-2 gap-2.5 text-sm text-white/50">
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Full &amp; less-than-container loads</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Lowest cost per kg at scale</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Port-to-port or door-to-door</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Ideal for pallets &amp; bulk freight</li>
+            </ul>
+          </div>
+          <div class="glass rounded-2xl p-6 text-center" style="background:rgba(56,189,248,0.06);">
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
+            <p class="text-4xl font-display font-bold text-white mb-1">$9<span class="text-base text-white/40">+ base</span></p>
+            <p class="text-xs text-white/35">plus $1.10/kg chargeable weight</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center reveal delay-200">
+          <div class="lg:col-span-2">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-truck-moving text-violet-400 text-lg"></i></div>
+            <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3">Road Freight</h2>
+            <p class="text-white/45 leading-relaxed mb-5">Reliable cross-country and last-mile trucking with live GPS visibility. Our regional hub network means most road shipments have a direct route, not a detour through a distant sort facility.</p>
+            <ul class="grid sm:grid-cols-2 gap-2.5 text-sm text-white/50">
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-violet-400 text-xs"></i>Live GPS tracking</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-violet-400 text-xs"></i>Cross-border capable</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-violet-400 text-xs"></i>Last-mile delivery included</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-violet-400 text-xs"></i>Ideal for regional distribution</li>
+            </ul>
+          </div>
+          <div class="glass rounded-2xl p-6 text-center" style="background:rgba(139,92,246,0.06);">
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
+            <p class="text-4xl font-display font-bold text-white mb-1">$11<span class="text-base text-white/40">+ base</span></p>
+            <p class="text-xs text-white/35">plus $1.65/kg chargeable weight</p>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="glass rounded-3xl p-8 reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-warehouse text-emerald-400"></i></div>
+            <h3 class="text-xl font-bold text-white mb-2">Warehousing &amp; Fulfillment</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Store inventory in our regional hubs and let us pick, pack and ship on your behalf — with the same real-time visibility as every other shipment.</p>
+          </div>
+          <div class="glass rounded-3xl p-8 reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-passport text-amber-400"></i></div>
+            <h3 class="text-xl font-bold text-white mb-2">Customs Clearance</h3>
+            <p class="text-white/40 text-sm leading-relaxed">In-house brokerage handles documentation for international shipments so your cargo never sits idle at the border.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 lg:px-10 bg-alt">
+      <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Get an instant quote</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Create a free account, enter your package details, and see your price before you book.</p>
+        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          Get a Quote <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+  </body>
+</html>

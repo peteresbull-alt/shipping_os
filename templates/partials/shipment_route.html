@@ -1,0 +1,48 @@
+{% with points=shipment.route_points %}
+<div class="glass rounded-2xl p-6 lg:p-8">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-1">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide">Shipment Route</h3>
+    {% if shipment.status == 'CANCELLED' %}
+    <span class="text-xs font-semibold text-white/30">Route halted</span>
+    {% elif shipment.status == 'DELIVERED' %}
+    <span class="text-xs font-semibold text-emerald-400"><i class="fas fa-circle-check mr-1"></i>Arrived at destination</span>
+    {% else %}
+    <span class="text-xs font-semibold text-cargo-300"><i class="fas fa-location-crosshairs mr-1"></i>Currently at {{ shipment.current_location|default:shipment.sender_city }}</span>
+    {% endif %}
+  </div>
+  <p class="text-xs text-white/30 mb-6">Every stop this shipment has passed through, in order</p>
+
+  <div class="overflow-x-auto -mx-2 px-2">
+    <div class="flex items-start min-w-max py-2">
+      {% for point in points %}
+      <div class="flex items-start">
+        <div class="flex flex-col items-center w-[96px] flex-shrink-0">
+          <div class="relative w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
+            {% if point.current %}bg-gradient-to-br from-cargo-400 to-cargo-600 shadow-lg shadow-cargo-500/30
+            {% elif point.kind == 'destination' and point.reached %}bg-gradient-to-br from-emerald-400 to-emerald-600
+            {% elif point.reached %}bg-gradient-to-br from-cargo-500/70 to-cargo-700/70
+            {% else %}bg-white/5 border border-dashed border-white/15{% endif %}">
+            {% if point.current %}
+            <span class="absolute inset-0 rounded-full bg-cargo-400 animate-ping opacity-40"></span>
+            {% endif %}
+            <i class="fas relative z-10 text-xs
+              {% if point.kind == 'origin' %}fa-circle-dot
+              {% elif point.kind == 'destination' %}fa-flag-checkered
+              {% else %}fa-location-dot{% endif %}
+              {% if point.reached or point.current %}text-ink-950{% else %}text-white/25{% endif %}"></i>
+          </div>
+          <p class="text-[11px] text-center leading-tight mt-2.5 px-1 {% if point.reached or point.current %}text-white/80 font-medium{% else %}text-white/25{% endif %}">{{ point.label }}</p>
+          <span class="mt-1 text-[9px] uppercase tracking-wider font-bold
+            {% if point.current %}text-cargo-400{% elif point.kind == 'destination' and point.reached %}text-emerald-400{% elif point.reached %}text-white/25{% else %}text-white/15{% endif %}">
+            {% if point.current %}Now{% elif point.kind == 'origin' %}Origin{% elif point.kind == 'destination' %}{% if point.reached %}Delivered{% else %}Destination{% endif %}{% else %}&nbsp;{% endif %}
+          </span>
+        </div>
+        {% if not forloop.last %}
+        <div class="w-10 sm:w-16 h-0.5 mt-[17px] flex-shrink-0 {% if point.reached %}bg-gradient-to-r from-cargo-500 to-cargo-500/30{% else %}bg-white/10{% endif %}"></div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endwith %}

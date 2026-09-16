@@ -1,0 +1,547 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>Fracht Express — Global Freight, Delivered with Velocity</title>
+    <meta property="og:title" content="Fracht Express — Global Freight, Delivered with Velocity" />
+    <meta property="og:type" content="website" />
+    <style>
+      .hero-bg {
+        background:
+          radial-gradient(ellipse 80% 50% at 50% -10%, rgba(245,158,11,0.16) 0%, transparent 60%),
+          radial-gradient(ellipse 55% 40% at 90% 85%, rgba(56,189,248,0.07) 0%, transparent 50%),
+          #04070F;
+      }
+      .bg-mid { background: #070B15; }
+      .bg-alt { background: #0A0F1C; }
+    </style>
+  </head>
+
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+
+    {% if messages %}
+    <div class="fixed top-24 right-4 z-50 space-y-2 max-w-sm w-[calc(100%-2rem)] sm:w-auto">
+      {% for message in messages %}
+      <div class="glass rounded-2xl shadow-2xl border-l-4 p-4 flex items-start gap-3 {% if message.tags == 'success' %}border-l-emerald-500{% else %}border-l-red-500{% endif %}">
+        <i class="fas {% if message.tags == 'success' %}fa-circle-check text-emerald-400{% else %}fa-circle-xmark text-red-400{% endif %} mt-0.5"></i>
+        <p class="flex-1 text-sm text-white/90">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% include 'partials/public_nav.html' with active='home' %}
+
+    <!-- HERO -->
+    <section class="relative min-h-screen hero-bg flex flex-col justify-center pt-28 pb-16 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="absolute top-1/4 right-1/4 w-2 h-2"><span class="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-cargo-400"></span></div>
+      <div class="absolute top-2/3 left-1/3 w-1.5 h-1.5" style="animation-delay:1.2s"><span class="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-50"></span></div>
+
+      <div class="max-w-[1400px] mx-auto w-full relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 lg:gap-14 items-center">
+          <div class="space-y-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cargo-500/30 badge-shimmer reveal">
+              <span class="w-1.5 h-1.5 bg-cargo-400 rounded-full animate-pulse"></span>
+              <span class="text-xs font-semibold text-cargo-400 uppercase tracking-wider">Trusted by 12,000+ shippers worldwide</span>
+            </div>
+
+            <h1 class="text-6xl sm:text-7xl lg:text-[5.2rem] font-display font-bold leading-[0.98] tracking-tight reveal delay-100">
+              Global freight,
+              <span class="block text-cargo-gradient">delivered with velocity.</span>
+            </h1>
+
+            <p class="text-lg text-white/50 leading-relaxed max-w-md reveal delay-200">
+              Fracht Express moves your cargo by air, sea and road — with live tracking,
+              transparent pricing and on-time delivery across 150+ countries.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
+              <a href="{% url 'register' %}" class="group inline-flex items-center justify-center px-8 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1">
+                Ship With Us
+                <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+              </a>
+              <a href="{% url 'track' %}" class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white/80 hover:text-white border border-white/10 hover:border-white/30 rounded-full transition-all hover:-translate-y-1">
+                <i class="fas fa-location-crosshairs mr-2"></i>Track a Shipment
+              </a>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-6 pt-2 reveal delay-400">
+              <div class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i><span class="text-xs text-white/40 font-medium">Zero hidden fees</span></div>
+              <div class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i><span class="text-xs text-white/40 font-medium">Real-time tracking</span></div>
+              <div class="flex items-center gap-2"><i class="fas fa-circle-check text-cargo-400 text-xs"></i><span class="text-xs text-white/40 font-medium">150+ countries served</span></div>
+            </div>
+          </div>
+
+          <!-- HERO VISUAL -->
+          <div class="relative reveal delay-200">
+            <div class="relative rounded-3xl overflow-hidden glass p-8 lg:p-10" style="box-shadow: 0 0 50px rgba(245,158,11,0.10);">
+              <svg viewBox="0 0 400 320" class="w-full h-auto">
+                <circle cx="200" cy="160" r="140" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                <circle cx="200" cy="160" r="100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+                <circle cx="200" cy="160" r="60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+                <path class="route-line" d="M 70 210 Q 160 60 330 120" fill="none" stroke="#F59E0B" stroke-width="2" opacity="0.7"/>
+                <circle cx="70" cy="210" r="6" fill="#F59E0B"/>
+                <circle cx="70" cy="210" r="11" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.5"/>
+                <circle cx="330" cy="120" r="6" fill="#38BDF8"/>
+                <circle cx="330" cy="120" r="11" fill="none" stroke="#38BDF8" stroke-width="1.5" opacity="0.5"/>
+                <g opacity="0.5">
+                  <circle cx="140" cy="90" r="2.5" fill="#fff"/>
+                  <circle cx="250" cy="230" r="2.5" fill="#fff"/>
+                  <circle cx="310" cy="200" r="2" fill="#fff"/>
+                  <circle cx="100" cy="140" r="2" fill="#fff"/>
+                </g>
+              </svg>
+
+              <div class="absolute -bottom-4 -left-4 lg:-left-6 glass rounded-2xl p-5 min-w-[210px] float-card border border-cargo-500/15">
+                <div class="flex items-center justify-between mb-2">
+                  <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Live Shipment</p>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25 font-bold">In Transit</span>
+                </div>
+                <p class="text-sm font-bold text-white font-mono mb-2">FX847213906</p>
+                <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-cargo-500 to-cargo-300" style="width:64%"></div>
+                </div>
+                <p class="text-[11px] text-white/35 mt-2">Shanghai &rarr; Los Angeles</p>
+              </div>
+
+              <div class="absolute -top-4 -right-2 lg:-right-4 glass rounded-2xl p-4 flex items-center gap-3 float-card-delayed border border-white/5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-shield-halved text-emerald-400"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-white">Fully Insured</p>
+                  <p class="text-xs text-white/40">Every shipment</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2">
+        <span class="text-xs font-medium text-white/20 uppercase tracking-widest">Explore</span>
+        <div class="w-5 h-8 border border-white/15 rounded-full flex justify-center items-start pt-1.5"><div class="w-1 h-2 bg-cargo-400 rounded-full animate-bounce"></div></div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <section class="py-5 overflow-hidden border-y border-cargo-500/10" style="background: rgba(180,83,9,0.10);">
+      <div class="flex animate-marquee whitespace-nowrap">
+        {% for i in "12" %}
+        <span class="text-cargo-400/70 text-xs font-bold uppercase tracking-widest mx-10">&#9733; Zero Hidden Fees</span>
+        <span class="text-white/25 text-xs font-bold uppercase tracking-widest mx-10">&#9733; 150+ Countries Served</span>
+        <span class="text-cargo-400/70 text-xs font-bold uppercase tracking-widest mx-10">&#9733; 24/7 Live Tracking</span>
+        <span class="text-white/25 text-xs font-bold uppercase tracking-widest mx-10">&#9733; Same-Day Pickup</span>
+        <span class="text-cargo-400/70 text-xs font-bold uppercase tracking-widest mx-10">&#9733; Fast Customs Clearance</span>
+        <span class="text-white/25 text-xs font-bold uppercase tracking-widest mx-10">&#9733; Fully Insured Cargo</span>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">The Network</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight reveal delay-100">Built for scale.<span class="block text-white/25">Trusted for precision.</span></h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="group glass rounded-2xl p-8 hover:border-cargo-500/30 transition-all hover-lift reveal gradient-border-anim">
+            <div class="text-5xl font-display font-bold text-cargo-gradient mb-2">2.4M+</div>
+            <div class="text-white/40 font-medium text-sm">Shipments Delivered</div>
+            <div class="mt-4 h-0.5 w-12 bg-cargo-500/40 group-hover:w-full transition-all duration-700 rounded-full"></div>
+          </div>
+          <div class="group glass rounded-2xl p-8 hover:border-cargo-500/30 transition-all hover-lift reveal delay-100 gradient-border-anim">
+            <div class="text-5xl font-display font-bold text-cargo-gradient mb-2">99.4%</div>
+            <div class="text-white/40 font-medium text-sm">On-Time Delivery Rate</div>
+            <div class="mt-4 h-0.5 w-12 bg-cargo-500/40 group-hover:w-full transition-all duration-700 rounded-full"></div>
+          </div>
+          <div class="group glass rounded-2xl p-8 hover:border-cargo-500/30 transition-all hover-lift reveal delay-200 gradient-border-anim">
+            <div class="text-5xl font-display font-bold text-cargo-gradient mb-2">150+</div>
+            <div class="text-white/40 font-medium text-sm">Countries Served</div>
+            <div class="mt-4 h-0.5 w-12 bg-cargo-500/40 group-hover:w-full transition-all duration-700 rounded-full"></div>
+          </div>
+          <div class="group glass rounded-2xl p-8 hover:border-cargo-500/30 transition-all hover-lift reveal delay-300 gradient-border-anim">
+            <div class="text-5xl font-display font-bold text-cargo-gradient mb-2">24/7</div>
+            <div class="text-white/40 font-medium text-sm">Live Dispatch &amp; Support</div>
+            <div class="mt-4 h-0.5 w-12 bg-cargo-500/40 group-hover:w-full transition-all duration-700 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES TEASER -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-alt relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cargo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-[1400px] mx-auto relative z-10">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16">
+          <div class="max-w-2xl">
+            <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">What We Move</p>
+            <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight reveal delay-100">Every mode of freight.<span class="block text-cargo-gradient">One seamless platform.</span></h2>
+          </div>
+          <a href="{% url 'services' %}" class="group inline-flex items-center text-sm font-bold text-cargo-400 hover:text-cargo-300 transition-colors reveal self-start lg:self-end flex-shrink-0">
+            View All Services <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="group glass rounded-2xl p-7 hover:border-cargo-500/20 transition-all hover-lift reveal gradient-border-anim">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-plane text-cargo-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Express Air</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Door-to-door in as little as 48 hours.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-sky-500/20 transition-all hover-lift reveal delay-100 gradient-border-anim">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-ship text-sky-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Ocean Freight</h3>
+            <p class="text-white/40 text-sm leading-relaxed">FCL &amp; LCL for high-volume trade.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-violet-500/20 transition-all hover-lift reveal delay-200 gradient-border-anim">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-truck-moving text-violet-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Road Freight</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Cross-country trucking, live GPS.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-emerald-500/20 transition-all hover-lift reveal delay-300 gradient-border-anim">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-warehouse text-emerald-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Warehousing</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Regional hubs, pick, pack, ship.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-mid relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-[600px] h-[500px] bg-cargo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-[1400px] mx-auto relative z-10">
+        <div class="max-w-2xl mx-auto text-center mb-16 lg:mb-20">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Why Fracht Express</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6 reveal delay-100">More than a carrier.<span class="block text-cargo-gradient">A logistics partner.</span></h2>
+          <p class="text-lg text-white/40 leading-relaxed reveal delay-200">Every shipment gets the same standard of care, whether it's a single parcel or a full container load.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="group glass rounded-2xl p-7 hover:border-cargo-500/20 transition-all hover-lift reveal">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-thumbs-up text-cargo-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Affordable, Transparent Rates</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Our services are priced to be accessible for businesses of every size — competitive, straightforward, and never padded with surprise fees.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-sky-500/20 transition-all hover-lift reveal delay-100">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-satellite-dish text-sky-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Real-Time Visibility</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Every checkpoint, from pickup to final delivery, updates live on your dashboard — no guessing, no waiting on hold.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-violet-500/20 transition-all hover-lift reveal delay-200">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-globe text-violet-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Truly Global Reach</h3>
+            <p class="text-white/40 text-sm leading-relaxed">A network of regional hubs and carrier partnerships means your cargo has a direct route almost anywhere in the world.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-emerald-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-shield-halved text-emerald-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Secure &amp; Insured</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Optional insurance and careful handling on every shipment, with fragile and high-value cargo flagged and treated accordingly.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-amber-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-headset text-amber-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Support That Answers</h3>
+            <p class="text-white/40 text-sm leading-relaxed">A live dispatch team and responsive support desk — real people who know your shipment, not a queue.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-cyan-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cyan-500/20" style="background:linear-gradient(135deg,rgba(34,211,238,0.2),rgba(8,145,178,0.08));"><i class="fas fa-leaf text-cyan-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Responsible Routing</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Consolidated loads and optimized routes that cut wasted miles, without cutting corners on speed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS TEASER -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-alt relative overflow-hidden">
+      <div class="absolute inset-0 dot-pattern pointer-events-none"></div>
+      <div class="max-w-[1400px] mx-auto relative z-10">
+        <div class="text-center mb-16 lg:mb-20">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Effortless By Design</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6 reveal delay-100">Booked and moving<span class="block text-white/25">in under three minutes.</span></h2>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          <div class="group text-center reveal">
+            <div class="relative inline-flex mb-8">
+              <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-cargo-500/20 to-cargo-600/10 border border-cargo-500/20 flex items-center justify-center group-hover:border-cargo-400/50 transition-all"><i class="fas fa-box text-cargo-400 text-2xl"></i></div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 bg-cargo-400 rounded-full flex items-center justify-center shadow-lg shadow-cargo-500/30"><span class="text-xs font-black text-ink-950">01</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Register &amp; Reach Out</h3>
+            <p class="text-white/40 leading-relaxed max-w-xs mx-auto text-sm">Create a free account and tell our team what you need to move.</p>
+          </div>
+          <div class="group text-center reveal delay-200">
+            <div class="relative inline-flex mb-8">
+              <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-sky-500/20 to-sky-600/10 border border-sky-500/20 flex items-center justify-center group-hover:border-sky-400/50 transition-all"><i class="fas fa-truck-fast text-sky-400 text-2xl"></i></div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 bg-sky-400 rounded-full flex items-center justify-center shadow-lg shadow-sky-500/30"><span class="text-xs font-black text-ink-950">02</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">We Book &amp; Dispatch</h3>
+            <p class="text-white/40 leading-relaxed max-w-xs mx-auto text-sm">Our team books your shipment and arranges pickup — it enters our network.</p>
+          </div>
+          <div class="group text-center reveal delay-400">
+            <div class="relative inline-flex mb-8">
+              <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 flex items-center justify-center group-hover:border-emerald-400/50 transition-all"><i class="fas fa-circle-check text-emerald-400 text-2xl"></i></div>
+              <div class="absolute -top-3 -right-3 w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30"><span class="text-xs font-black text-ink-950">03</span></div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Track &amp; Receive</h3>
+            <p class="text-white/40 leading-relaxed max-w-xs mx-auto text-sm">Follow every checkpoint live, to the doorstep.</p>
+          </div>
+        </div>
+        <div class="text-center mt-16 reveal delay-300">
+          <a href="{% url 'how_it_works' %}" class="inline-flex items-center px-8 py-3.5 text-sm font-bold text-white/80 hover:text-white border border-white/10 hover:border-cargo-500/30 rounded-full transition-all">
+            See the Full Process <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDUSTRIES SERVED -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="max-w-2xl mx-auto text-center mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Who We Move For</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6 reveal delay-100">Built for every industry,<span class="block text-white/25">not just one lane.</span></h2>
+          <p class="text-lg text-white/40 leading-relaxed reveal delay-200">Different cargo, different urgency, same reliability — whatever your business ships.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="group glass rounded-2xl p-7 hover:border-cargo-500/20 transition-all hover-lift reveal">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-bag-shopping text-cargo-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">E-commerce &amp; Retail</h3>
+            <p class="text-white/40 text-sm leading-relaxed">High-volume parcel shipping with the speed online shoppers expect.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-sky-500/20 transition-all hover-lift reveal delay-100">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-industry text-sky-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Manufacturing</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Raw materials and finished goods moved on schedules that keep production lines running.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-emerald-500/20 transition-all hover-lift reveal delay-200">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-briefcase-medical text-emerald-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Healthcare &amp; Pharma</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Careful, priority handling for time- and temperature-sensitive shipments.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-violet-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-car text-violet-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Automotive</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Parts and components shipped reliably, from single components to full pallets.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-amber-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-microchip text-amber-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Technology &amp; Electronics</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Fragile, high-value cargo handled and insured with the attention it needs.</p>
+          </div>
+          <div class="group glass rounded-2xl p-7 hover:border-cyan-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cyan-500/20" style="background:linear-gradient(135deg,rgba(34,211,238,0.2),rgba(8,145,178,0.08));"><i class="fas fa-apple-whole text-cyan-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Food &amp; Beverage</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Fast transit windows for goods that can't afford to sit in a warehouse.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRACKING WIDGET -->
+    <section id="tracking" class="py-24 lg:py-28 px-6 lg:px-10 bg-alt relative overflow-hidden">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cargo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-3xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Where's My Package?</p>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6 reveal delay-100">Track any shipment,<span class="block text-cargo-gradient">instantly.</span></h2>
+        <p class="text-lg text-white/40 mb-10 reveal delay-200">No account needed. Just enter your tracking number below.</p>
+        <form action="{% url 'track' %}" method="get" class="reveal delay-300 flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+          <input type="text" name="t" required placeholder="e.g. FX847213906"
+                 class="flex-1 rounded-full bg-white/5 border border-white/10 px-6 py-4 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-cargo-500/40 focus:border-cargo-500/60 font-mono tracking-wider transition-all" />
+          <button type="submit" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-lg shadow-cargo-500/20">
+            <i class="fas fa-magnifying-glass mr-2"></i>Track
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- GLOBAL NETWORK -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-mid relative overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="max-w-[1400px] mx-auto relative z-10">
+        <div class="max-w-2xl mx-auto text-center mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Our Network</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6 reveal delay-100">A network built<span class="block text-cargo-gradient">to reach everywhere.</span></h2>
+          <p class="text-lg text-white/40 leading-relaxed reveal delay-200">Regional hubs and carrier partnerships across every major trade lane.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          <div class="group glass rounded-2xl p-6 text-center hover:border-cargo-500/20 transition-all hover-lift reveal">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-flag-usa text-cargo-400"></i></div>
+            <h3 class="font-bold text-white mb-1">North America</h3>
+            <p class="text-white/40 text-xs leading-relaxed">Coast-to-coast road and air coverage</p>
+          </div>
+          <div class="group glass rounded-2xl p-6 text-center hover:border-sky-500/20 transition-all hover-lift reveal delay-100">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-landmark text-sky-400"></i></div>
+            <h3 class="font-bold text-white mb-1">Europe</h3>
+            <p class="text-white/40 text-xs leading-relaxed">Dense hub coverage across the EU &amp; UK</p>
+          </div>
+          <div class="group glass rounded-2xl p-6 text-center hover:border-violet-500/20 transition-all hover-lift reveal delay-200">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-city text-violet-400"></i></div>
+            <h3 class="font-bold text-white mb-1">Asia-Pacific</h3>
+            <p class="text-white/40 text-xs leading-relaxed">Strong ocean &amp; air capacity from major ports</p>
+          </div>
+          <div class="group glass rounded-2xl p-6 text-center hover:border-emerald-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-mountain-sun text-emerald-400"></i></div>
+            <h3 class="font-bold text-white mb-1">Latin America</h3>
+            <p class="text-white/40 text-xs leading-relaxed">Growing road &amp; air network across the region</p>
+          </div>
+          <div class="group glass rounded-2xl p-6 text-center hover:border-amber-500/20 transition-all hover-lift reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-compass text-amber-400"></i></div>
+            <h3 class="font-bold text-white mb-1">Middle East &amp; Africa</h3>
+            <p class="text-white/40 text-xs leading-relaxed">Expanding partner network into key markets</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="stories" class="py-24 lg:py-28 px-6 lg:px-10 bg-alt">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 gap-6">
+          <div class="max-w-2xl">
+            <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Customer Stories</p>
+            <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight reveal delay-100">Businesses that ship<span class="block text-white/25">with confidence.</span></h2>
+          </div>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 group glass rounded-3xl p-8 lg:p-12 hover:border-cargo-500/20 transition-all hover-lift reveal gradient-border-anim">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-shrink-0">
+                <div class="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl flex items-center justify-center text-2xl font-bold text-ink-950 bg-gradient-to-br from-cargo-400 to-cargo-600">DM</div>
+              </div>
+              <div class="flex flex-col justify-between">
+                <div>
+                  <div class="text-cargo-400 text-lg mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <blockquote class="text-2xl lg:text-3xl font-medium text-white leading-relaxed mb-6">"Fracht Express cut our average delivery time by 40%. The live tracking alone changed how we handle customer support."</blockquote>
+                </div>
+                <div><p class="font-bold text-white">Dana Morgan</p><p class="text-white/40 text-sm">Operations Lead, Northgate Retail</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="group glass rounded-3xl p-8 hover:border-cargo-500/20 transition-all hover-lift reveal delay-100 gradient-border-anim">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-ink-950 bg-gradient-to-br from-sky-400 to-sky-600 mb-6">RK</div>
+            <div class="text-cargo-400 mb-4">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote class="text-lg text-white leading-relaxed mb-6">"Ocean freight rates were 20% below our old provider — and the customs desk actually answers the phone."</blockquote>
+            <p class="font-bold text-white">Rahul Kapoor</p><p class="text-white/40 text-sm">Founder, Kapoor Imports</p>
+          </div>
+          <div class="group rounded-3xl p-8 hover-lift reveal delay-100 gradient-border-anim border border-cargo-500/20" style="background: linear-gradient(135deg, rgba(180,83,9,0.3), rgba(69,26,3,0.55));">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-ink-950 bg-gradient-to-br from-emerald-400 to-emerald-600 mb-6">SL</div>
+            <div class="text-cargo-400 mb-4">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote class="text-lg text-cargo-50/80 leading-relaxed mb-6">"Booking a shipment takes less time than making coffee. This is what logistics software should feel like."</blockquote>
+            <p class="font-bold text-white">Sofia Lindqvist</p><p class="text-cargo-200/50 text-sm">E-commerce Manager</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUSTAINABILITY -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-14 items-center">
+        <div class="reveal">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4">Shipping Responsibly</p>
+          <h2 class="text-3xl lg:text-4xl font-display font-bold leading-tight mb-6">Moving freight shouldn't cost the planet.</h2>
+          <p class="text-white/45 leading-relaxed mb-6">We build sustainability into how routes are planned, not as an afterthought. Consolidated loads, optimized paths and responsible partners mean less wasted fuel and fewer half-empty trucks on the road — without slowing your shipment down.</p>
+          <a href="{% url 'about' %}" class="inline-flex items-center gap-2 text-cargo-400 text-sm font-semibold hover:text-cargo-300 transition-colors">
+            <span>More About Our Approach</span><i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="grid gap-4 reveal delay-200">
+          <div class="glass rounded-2xl p-6 flex items-center gap-4 hover:border-cyan-500/20 transition-all hover-lift">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border border-cyan-500/20" style="background:linear-gradient(135deg,rgba(34,211,238,0.2),rgba(8,145,178,0.08));"><i class="fas fa-route text-cyan-400"></i></div>
+            <div>
+              <h3 class="font-bold text-white mb-1">Route Optimization</h3>
+              <p class="text-white/40 text-sm">Smarter paths that cut wasted mileage across the network.</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-6 flex items-center gap-4 hover:border-emerald-500/20 transition-all hover-lift">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-boxes-packing text-emerald-400"></i></div>
+            <div>
+              <h3 class="font-bold text-white mb-1">Load Consolidation</h3>
+              <p class="text-white/40 text-sm">Fuller trucks and containers mean fewer trips overall.</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-6 flex items-center gap-4 hover:border-cargo-500/20 transition-all hover-lift">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-handshake text-cargo-400"></i></div>
+            <div>
+              <h3 class="font-bold text-white mb-1">Responsible Partners</h3>
+              <p class="text-white/40 text-sm">We work with carriers who share our environmental standards.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ TEASER -->
+    <section class="py-24 lg:py-28 px-6 lg:px-10 bg-alt">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Questions</p>
+          <h2 class="text-4xl lg:text-5xl font-display font-bold leading-tight reveal delay-100">Frequently asked.</h2>
+        </div>
+        <div class="space-y-3">
+          {% for q, a in faqs %}
+          <div class="glass rounded-2xl overflow-hidden reveal">
+            <button type="button" onclick="toggleFaq(this)" class="w-full flex items-center justify-between px-6 py-5 text-left">
+              <span class="font-semibold text-white pr-4">{{ q }}</span>
+              <i class="fas fa-chevron-down text-cargo-400 transition-transform flex-shrink-0"></i>
+            </button>
+            <div class="faq-answer px-6"><p class="text-white/45 leading-relaxed pb-5">{{ a }}</p></div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-10 reveal">
+          <a href="{% url 'faq' %}" class="inline-flex items-center text-sm font-bold text-cargo-400 hover:text-cargo-300 transition-colors">
+            View All FAQs <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="py-20 px-6 lg:px-10 bg-mid">
+      <div class="max-w-3xl mx-auto text-center">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Stay In The Loop</p>
+        <h2 class="text-3xl lg:text-4xl font-display font-bold leading-tight mb-4 reveal delay-100">Shipping tips and network updates,<span class="block text-white/25">straight to your inbox.</span></h2>
+        <p class="text-white/40 mb-8 reveal delay-200">No spam — just the occasional update worth reading. Unsubscribe anytime.</p>
+        <form action="{% url 'newsletter_signup' %}" method="post" class="reveal delay-300 flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+          {% csrf_token %}
+          <input type="email" name="email" required placeholder="you@company.com"
+                 class="flex-1 rounded-full bg-white/5 border border-white/10 px-6 py-4 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-cargo-500/40 focus:border-cargo-500/60 transition-all" />
+          <button type="submit" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-lg shadow-cargo-500/20">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 lg:px-10 bg-alt">
+      <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Ready to ship smarter?</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Create your free account and our team will get your next shipment moving.</p>
+        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          Create Free Account <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+    <script>
+      function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('i');
+        document.querySelectorAll('.faq-answer.open').forEach((el) => {
+          if (el !== answer) { el.classList.remove('open'); el.previousElementSibling.querySelector('i').style.transform = ''; }
+        });
+        answer.classList.toggle('open');
+        icon.style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : '';
+      }
+    </script>
+  </body>
+</html>

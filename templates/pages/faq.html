@@ -1,0 +1,67 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>FAQ · Fracht Express</title>
+    <style>
+      .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
+      .bg-mid { background: #070B15; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+    {% include 'partials/public_nav.html' with active='faq' %}
+
+    <!-- HERO -->
+    <section class="relative hero-bg pt-32 pb-16 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="max-w-3xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Questions</p>
+        <h1 class="text-5xl lg:text-6xl font-display font-bold leading-tight mb-6 reveal delay-100">Frequently asked<span class="block text-cargo-gradient">questions.</span></h1>
+        <p class="text-lg text-white/45 leading-relaxed reveal delay-200">Can't find what you're looking for? <a href="{% url 'contact' %}" class="text-cargo-400 hover:text-cargo-300 font-semibold">Reach out to our team</a>.</p>
+      </div>
+    </section>
+
+    <!-- FAQ LIST -->
+    <section class="py-16 lg:py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-3xl mx-auto space-y-3">
+        {% for q, a in faqs %}
+        <div class="glass rounded-2xl overflow-hidden reveal">
+          <button type="button" onclick="toggleFaq(this)" class="w-full flex items-center justify-between px-6 py-5 text-left">
+            <span class="font-semibold text-white pr-4">{{ q }}</span>
+            <i class="fas fa-chevron-down text-cargo-400 transition-transform flex-shrink-0"></i>
+          </button>
+          <div class="faq-answer px-6"><p class="text-white/45 leading-relaxed pb-5">{{ a }}</p></div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-white mb-4 relative z-10">Still have questions?</h2>
+        <p class="text-white/45 mb-8 max-w-xl mx-auto relative z-10">Our team typically responds within one business day.</p>
+        <a href="{% url 'contact' %}" class="inline-flex items-center px-8 py-3.5 text-sm font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          Contact Us <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+    <script>
+      function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('i');
+        document.querySelectorAll('.faq-answer.open').forEach((el) => {
+          if (el !== answer) { el.classList.remove('open'); el.previousElementSibling.querySelector('i').style.transform = ''; }
+        });
+        answer.classList.toggle('open');
+        icon.style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : '';
+      }
+    </script>
+  </body>
+</html>

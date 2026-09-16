@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block page_description %}Saved sender and recipient addresses{% endblock %}
+
+{% block content %}
+<div>
+  <div class="flex justify-end mb-6">
+    <a href="{% url 'address_add' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/15">
+      <i class="fas fa-plus mr-2"></i>Add Address
+    </a>
+  </div>
+
+  {% if addresses %}
+  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+    {% for address in addresses %}
+    <div class="glass rounded-2xl p-5 relative">
+      {% if address.is_default %}
+      <span class="absolute top-4 right-4 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cargo-500/15 text-cargo-300 border border-cargo-500/25">Default</span>
+      {% endif %}
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4 bg-gradient-to-br from-cargo-500/20 to-cargo-700/10"><i class="fas fa-location-dot text-cargo-400"></i></div>
+      <p class="font-bold text-white mb-0.5">{{ address.label }}</p>
+      <p class="text-sm text-white/60 mb-1">{{ address.contact_name }}</p>
+      {% if address.company_name %}<p class="text-xs text-white/35 mb-2">{{ address.company_name }}</p>{% endif %}
+      <p class="text-xs text-white/40 leading-relaxed mb-4">{{ address.one_line }}</p>
+      <p class="text-xs text-white/35 mb-4"><i class="fas fa-phone mr-1.5"></i>{{ address.phone_number }}</p>
+      <div class="flex items-center gap-2 pt-4 border-t border-white/8">
+        <a href="{% url 'address_edit' address.id %}" class="flex-1 text-center text-xs font-semibold rounded-lg py-2 bg-white/5 hover:bg-white/10 text-white/70 border border-white/10 transition-all"><i class="fas fa-pen mr-1.5"></i>Edit</a>
+        <a href="{% url 'address_delete' address.id %}" class="flex-1 text-center text-xs font-semibold rounded-lg py-2 bg-white/5 hover:bg-red-500/10 text-white/50 hover:text-red-300 border border-white/10 hover:border-red-500/25 transition-all"><i class="fas fa-trash mr-1.5"></i>Delete</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass rounded-2xl p-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4"><i class="fas fa-address-book text-white/25 text-2xl"></i></div>
+    <p class="text-white/50 mb-4">No saved addresses yet</p>
+    <a href="{% url 'address_add' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500"><i class="fas fa-plus mr-2"></i>Add Your First Address</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

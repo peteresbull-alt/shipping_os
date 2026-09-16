@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block page_description %}Tell us what's going on and we'll take it from here{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+  <div class="glass rounded-2xl p-6 lg:p-8">
+    {% if form.non_field_errors %}
+    <div class="rounded-xl bg-red-500/10 border border-red-500/25 px-4 py-3 mb-5 text-sm text-red-300">
+      {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+    </div>
+    {% endif %}
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Category</label>{{ form.category }}</div>
+        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Priority</label>{{ form.priority }}</div>
+      </div>
+      {% if form.fields.shipment.queryset %}
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Related Shipment <span class="text-white/25 normal-case">(optional)</span></label>{{ form.shipment }}</div>
+      {% endif %}
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Subject</label>{{ form.subject }}{% if form.subject.errors %}<p class="text-xs text-red-400 mt-1.5">{{ form.subject.errors.0 }}</p>{% endif %}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Description</label>{{ form.description }}{% if form.description.errors %}<p class="text-xs text-red-400 mt-1.5">{{ form.description.errors.0 }}</p>{% endif %}</div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <button type="submit" class="inline-flex items-center px-6 py-3 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/15">
+          <i class="fas fa-paper-plane mr-2"></i>Submit Ticket
+        </button>
+        <a href="{% url 'support_ticket_list' %}" class="text-sm font-semibold text-white/40 hover:text-white/70 px-4">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

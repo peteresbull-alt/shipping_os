@@ -1,0 +1,101 @@
+{% load static %}
+{% load shipping_extras %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>Track Shipment · Fracht Express</title>
+  </head>
+  <body class="h-full font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+
+    {% include 'partials/public_nav.html' with active='track' %}
+
+    {% if messages %}
+    <div class="max-w-2xl mx-auto px-6 pt-28 relative z-10">
+      {% for message in messages %}
+      <div class="rounded-xl bg-red-500/10 border border-red-500/25 px-4 py-3 text-sm text-red-300 flex items-center gap-2">
+        <i class="fas fa-circle-exclamation"></i>{{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <section class="relative z-10 px-6 {% if messages %}pt-6{% else %}pt-32{% endif %} pb-10 hero-bg" style="background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F;">
+      <div class="max-w-2xl mx-auto text-center">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4">Live Tracking</p>
+        <h1 class="text-4xl lg:text-5xl font-display font-bold leading-tight mb-8">Where's your package?</h1>
+        <form method="get" action="{% url 'track' %}" class="flex flex-col sm:flex-row gap-3">
+          <input type="text" name="t" value="{{ tracking_number }}" required placeholder="e.g. FX847213906"
+                 class="flex-1 rounded-full bg-white/5 border border-white/10 px-6 py-4 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-cargo-500/40 focus:border-cargo-500/60 font-mono tracking-wider transition-all" />
+          <button type="submit" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-lg shadow-cargo-500/20">
+            <i class="fas fa-magnifying-glass mr-2"></i>Track
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section class="relative z-10 px-6 pb-24 max-w-3xl mx-auto">
+      {% if shipment %}
+      <div class="glass rounded-3xl p-6 lg:p-8 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-1">Tracking Number</p>
+            <p class="text-xl font-bold font-mono text-white">{{ shipment.tracking_number }}</p>
+          </div>
+          <span class="px-3 py-1.5 rounded-full text-xs font-bold border {{ shipment.status|status_badge }}">
+            <i class="fas {{ shipment.status|status_icon }} mr-1"></i>{{ shipment.get_status_display }}
+          </span>
+        </div>
+
+        <div class="mb-8">
+          {% include 'partials/shipment_stepper.html' %}
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4 mb-2">
+          <div><p class="text-xs text-white/35 mb-1">From</p><p class="text-sm font-semibold text-white">{{ shipment.sender_city }}, {{ shipment.sender_country }}</p></div>
+          <div><p class="text-xs text-white/35 mb-1">To</p><p class="text-sm font-semibold text-white">{{ shipment.recipient_city }}, {{ shipment.recipient_country }}</p></div>
+          <div><p class="text-xs text-white/35 mb-1">Estimated Delivery</p><p class="text-sm font-semibold text-white">{{ shipment.estimated_delivery|date:"M d, Y"|default:"—" }}</p></div>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        {% include 'partials/shipment_route.html' %}
+      </div>
+
+      <div class="glass rounded-3xl p-6 lg:p-8">
+        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-6">Shipment Journey</h3>
+        <div class="space-y-0">
+          {% for event in events %}
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center border {{ event.status|status_badge }} flex-shrink-0">
+                <i class="fas {{ event.status|status_icon }} text-xs"></i>
+              </div>
+              {% if not forloop.last %}<div class="w-px flex-1 bg-white/10 my-1"></div>{% endif %}
+            </div>
+            <div class="pb-8 flex-1">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="font-semibold text-white text-sm">{{ event.get_status_display }}</p>
+                <p class="text-xs text-white/35">{{ event.timestamp|date:"M d, Y — H:i" }}</p>
+              </div>
+              <p class="text-sm text-white/45 mt-1">{{ event.location }}</p>
+              {% if event.note %}<p class="text-xs text-white/30 mt-1">{{ event.note }}</p>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% elif searched %}
+      <div class="glass rounded-3xl p-12 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4"><i class="fas fa-box-open text-white/30 text-2xl"></i></div>
+        <p class="text-white/60 font-semibold mb-1">No shipment found</p>
+        <p class="text-white/35 text-sm">Double-check your tracking number and try again.</p>
+      </div>
+      {% endif %}
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+  </body>
+</html>

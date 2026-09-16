@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block page_description %}Stay up to date on every shipment{% endblock %}
+
+{% block content %}
+<div>
+  {% if notifications %}
+  <div class="flex justify-end mb-4">
+    <form method="post" action="{% url 'notification_mark_all_read' %}">
+      {% csrf_token %}
+      <button type="submit" class="text-sm font-semibold text-cargo-400 hover:text-cargo-300"><i class="fas fa-check-double mr-1.5"></i>Mark all as read</button>
+    </form>
+  </div>
+  <div class="glass rounded-2xl divide-y divide-white/5">
+    {% for notification in notifications %}
+    <a href="{% url 'notification_mark_read' notification.id %}" class="flex items-start gap-4 p-5 hover:bg-white/[0.03] transition-colors {% if not notification.is_read %}bg-cargo-500/[0.03]{% endif %}">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+        {% if notification.notification_type == 'SHIPMENT' %}bg-cargo-500/15
+        {% elif notification.notification_type == 'DELIVERY' %}bg-emerald-500/15
+        {% elif notification.notification_type == 'BILLING' %}bg-violet-500/15
+        {% elif notification.notification_type == 'SECURITY' %}bg-red-500/15
+        {% else %}bg-white/8{% endif %}">
+        <i class="fas
+          {% if notification.notification_type == 'SHIPMENT' %}fa-box text-cargo-400
+          {% elif notification.notification_type == 'DELIVERY' %}fa-truck text-emerald-400
+          {% elif notification.notification_type == 'BILLING' %}fa-credit-card text-violet-400
+          {% elif notification.notification_type == 'SECURITY' %}fa-shield-halved text-red-400
+          {% else %}fa-bell text-white/50{% endif %}"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <p class="font-semibold text-white text-sm">{{ notification.title }}</p>
+          {% if not notification.is_read %}<span class="w-1.5 h-1.5 rounded-full bg-cargo-400"></span>{% endif %}
+        </div>
+        <p class="text-sm text-white/45 mt-0.5">{{ notification.message }}</p>
+        <p class="text-xs text-white/25 mt-1.5">{{ notification.created_at|date:"M d, Y — H:i" }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass rounded-2xl p-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4"><i class="fas fa-bell text-white/25 text-2xl"></i></div>
+    <p class="text-white/50">You're all caught up — no notifications yet.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

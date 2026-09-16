@@ -1,0 +1,105 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>Contact Us · Fracht Express</title>
+    <style>
+      .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+    {% include 'partials/public_nav.html' with active='contact' %}
+
+    {% if messages %}
+    <div class="fixed top-24 right-4 z-50 space-y-2 max-w-sm w-[calc(100%-2rem)] sm:w-auto">
+      {% for message in messages %}
+      <div class="glass rounded-2xl shadow-2xl border-l-4 p-4 flex items-start gap-3 {% if message.tags == 'success' %}border-l-emerald-500{% else %}border-l-red-500{% endif %}">
+        <i class="fas {% if message.tags == 'success' %}fa-circle-check text-emerald-400{% else %}fa-circle-xmark text-red-400{% endif %} mt-0.5"></i>
+        <p class="flex-1 text-sm text-white/90">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- HERO -->
+    <section class="relative hero-bg pt-32 pb-16 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="max-w-3xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Get In Touch</p>
+        <h1 class="text-5xl lg:text-6xl font-display font-bold leading-tight mb-6 reveal delay-100">Let's talk<span class="block text-cargo-gradient">freight.</span></h1>
+        <p class="text-lg text-white/45 leading-relaxed reveal delay-200">Questions about a quote, an existing shipment, or a partnership — our team typically replies within one business day.</p>
+      </div>
+    </section>
+
+    <!-- FORM + INFO -->
+    <section class="pb-24 px-6 lg:px-10">
+      <div class="max-w-[1100px] mx-auto grid lg:grid-cols-5 gap-8">
+        <div class="lg:col-span-3 glass rounded-3xl p-6 lg:p-10 reveal">
+          {% if form.non_field_errors %}
+          <div class="rounded-xl bg-red-500/10 border border-red-500/25 px-4 py-3 mb-5 text-sm text-red-300">
+            {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+          </div>
+          {% endif %}
+          <form method="post" class="space-y-5">
+            {% csrf_token %}
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Full Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<p class="text-xs text-red-400 mt-1.5">{{ form.name.errors.0 }}</p>{% endif %}
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Email Address</label>
+                {{ form.email }}
+                {% if form.email.errors %}<p class="text-xs text-red-400 mt-1.5">{{ form.email.errors.0 }}</p>{% endif %}
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Company <span class="text-white/25 normal-case">(optional)</span></label>
+                {{ form.company_name }}
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Topic</label>
+                {{ form.topic }}
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Message</label>
+              {{ form.message }}
+              {% if form.message.errors %}<p class="text-xs text-red-400 mt-1.5">{{ form.message.errors.0 }}</p>{% endif %}
+            </div>
+            <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/20">
+              Send Message <i class="fas fa-paper-plane ml-2"></i>
+            </button>
+          </form>
+        </div>
+
+        <div class="lg:col-span-2 space-y-4">
+          <div class="glass rounded-2xl p-6 reveal delay-100">
+            <div class="w-11 h-11 rounded-xl bg-cargo-500/15 flex items-center justify-center mb-4"><i class="fas fa-envelope text-cargo-400"></i></div>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-1">Email</p>
+            <p class="text-white font-semibold">support@frachtexpress.com</p>
+          </div>
+          <div class="glass rounded-2xl p-6 reveal delay-200">
+            <div class="w-11 h-11 rounded-xl bg-sky-500/15 flex items-center justify-center mb-4"><i class="fas fa-phone text-sky-400"></i></div>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-1">Phone</p>
+            <p class="text-white font-semibold">+1 (800) 555-0142</p>
+            <p class="text-xs text-white/30 mt-1">Mon–Fri, 8am–8pm ET</p>
+          </div>
+          <div class="glass rounded-2xl p-6 reveal delay-300">
+            <div class="w-11 h-11 rounded-xl bg-violet-500/15 flex items-center justify-center mb-4"><i class="fas fa-location-dot text-violet-400"></i></div>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-1">Headquarters</p>
+            <p class="text-white font-semibold">100 Harbor Way, Los Angeles, CA</p>
+            <p class="text-xs text-white/30 mt-1">Plus 40+ regional hubs worldwide</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+  </body>
+</html>

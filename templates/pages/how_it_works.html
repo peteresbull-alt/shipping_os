@@ -1,0 +1,111 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>How It Works · Fracht Express</title>
+    <style>
+      .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
+      .bg-mid { background: #070B15; }
+      .bg-alt { background: #0A0F1C; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+    {% include 'partials/public_nav.html' with active='how_it_works' %}
+
+    <!-- HERO -->
+    <section class="relative hero-bg pt-32 pb-16 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 dot-pattern pointer-events-none"></div>
+      <div class="max-w-4xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Effortless By Design</p>
+        <h1 class="text-5xl lg:text-7xl font-display font-bold leading-[1.02] mb-6 reveal delay-100">
+          Booked and moving<span class="block text-cargo-gradient">in under three minutes.</span>
+        </h1>
+        <p class="text-lg text-white/45 leading-relaxed max-w-2xl mx-auto reveal delay-200">
+          Here's exactly what happens from the moment you hit "Ship Now" to the moment your recipient signs for delivery.
+        </p>
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="py-16 lg:py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1000px] mx-auto space-y-6">
+
+        <div class="glass rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row gap-6 sm:items-center reveal">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cargo-500/20 to-cargo-600/10 border border-cargo-500/20 flex items-center justify-center flex-shrink-0"><span class="text-2xl font-display font-black text-cargo-400">01</span></div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">Get an instant quote</h3>
+            <p class="text-white/45 leading-relaxed">Enter your package weight, dimensions and destination. We calculate your price live — base rate plus chargeable weight, with optional insurance — before you commit to anything.</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row gap-6 sm:items-center reveal delay-100">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500/20 to-sky-600/10 border border-sky-500/20 flex items-center justify-center flex-shrink-0"><span class="text-2xl font-display font-black text-sky-400">02</span></div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">Book &amp; confirm pickup</h3>
+            <p class="text-white/45 leading-relaxed">Choose sender and recipient details — pull them from your saved address book for a one-click checkout — and confirm your shipment. You'll get a tracking number immediately.</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row gap-6 sm:items-center reveal delay-200">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-violet-600/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0"><span class="text-2xl font-display font-black text-violet-400">03</span></div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">We pick up &amp; move it</h3>
+            <p class="text-white/45 leading-relaxed">A courier collects your package and it enters our network — air, sea or road, depending on your chosen service. Every checkpoint along the way posts a live update.</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row gap-6 sm:items-center reveal delay-300">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0"><span class="text-2xl font-display font-black text-emerald-400">04</span></div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">Track &amp; receive</h3>
+            <p class="text-white/45 leading-relaxed">Follow your shipment from booked to delivered on your dashboard — or share the public tracking link with your recipient. No account required to check status.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NETWORK -->
+    <section class="py-20 lg:py-28 px-6 lg:px-10 bg-alt">
+      <div class="max-w-[1100px] mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Behind the Scenes</p>
+          <h2 class="text-4xl font-display font-bold leading-tight reveal delay-100">What keeps your cargo<span class="block text-white/25">actually moving.</span></h2>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-5">
+          <div class="glass rounded-2xl p-7 text-center reveal">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-warehouse text-cargo-400"></i></div>
+            <h3 class="font-bold text-white mb-2">40+ Regional Hubs</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Sorting facilities placed for direct routes, not detours.</p>
+          </div>
+          <div class="glass rounded-2xl p-7 text-center reveal delay-100">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-passport text-amber-400"></i></div>
+            <h3 class="font-bold text-white mb-2">In-House Customs Desk</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Documentation handled by our own brokers, not a queue.</p>
+          </div>
+          <div class="glass rounded-2xl p-7 text-center reveal delay-200">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-headset text-sky-400"></i></div>
+            <h3 class="font-bold text-white mb-2">24/7 Live Dispatch</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Real people monitoring exceptions around the clock.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">See it for yourself.</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Book your first shipment and watch it move in real time.</p>
+        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          Ship With Us <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+  </body>
+</html>

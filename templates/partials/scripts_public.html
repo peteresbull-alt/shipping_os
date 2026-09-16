@@ -1,0 +1,29 @@
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu')?.classList.toggle('open');
+  }
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('backdrop-blur-xl');
+        navbar.style.background = 'rgba(4,7,15,0.75)';
+        navbar.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+      } else {
+        navbar.style.background = 'transparent';
+        navbar.style.borderBottom = '1px solid transparent';
+      }
+    });
+  }
+</script>

@@ -1,0 +1,99 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    {% include 'partials/head.html' %}
+    <title>About Us · Fracht Express</title>
+    <style>
+      .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
+      .bg-mid { background: #070B15; }
+      .bg-alt { background: #0A0F1C; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-950 text-white overflow-x-hidden">
+    <div class="noise fixed inset-0 z-0 pointer-events-none"></div>
+    {% include 'partials/public_nav.html' with active='about' %}
+
+    <!-- HERO -->
+    <section class="relative hero-bg pt-32 pb-20 px-6 lg:px-10 overflow-hidden">
+      <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+      <div class="max-w-4xl mx-auto text-center relative z-10">
+        <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">Our Story</p>
+        <h1 class="text-5xl lg:text-7xl font-display font-bold leading-[1.02] mb-6 reveal delay-100">
+          Moving the world's goods,<span class="block text-cargo-gradient">one shipment at a time.</span>
+        </h1>
+        <p class="text-lg text-white/45 leading-relaxed max-w-2xl mx-auto reveal delay-200">
+          Fracht Express was built on a simple idea: freight forwarding should be fast, transparent, and never leave you guessing where your cargo is.
+        </p>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="py-20 lg:py-28 px-6 lg:px-10 bg-mid">
+      <div class="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-14 items-center">
+        <div class="reveal">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4">From Frustration to Fracht Express</p>
+          <h2 class="text-3xl lg:text-4xl font-display font-bold leading-tight mb-6">We got tired of freight forwarders that hide the ball.</h2>
+          <div class="space-y-4 text-white/45 leading-relaxed">
+            <p>Fracht Express started with a straightforward frustration: booking a shipment shouldn't require five phone calls, and knowing where your cargo is shouldn't require a favor from a warehouse manager.</p>
+            <p>So we built a platform that puts the entire shipping lifecycle — quoting, booking, payment, and live tracking — into one dashboard. No black boxes, no surprise fees, no "let me check and call you back."</p>
+            <p>Today we move freight by air, sea and road across 150+ countries, backed by a network of regional hubs and an in-house customs desk that keeps cargo moving instead of sitting in a queue.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 reveal delay-200">
+          <div class="glass rounded-2xl p-6"><p class="text-3xl font-display font-bold text-cargo-gradient mb-1">2018</p><p class="text-xs text-white/40">Founded</p></div>
+          <div class="glass rounded-2xl p-6"><p class="text-3xl font-display font-bold text-cargo-gradient mb-1">40+</p><p class="text-xs text-white/40">Regional Hubs</p></div>
+          <div class="glass rounded-2xl p-6"><p class="text-3xl font-display font-bold text-cargo-gradient mb-1">12,000+</p><p class="text-xs text-white/40">Businesses Served</p></div>
+          <div class="glass rounded-2xl p-6"><p class="text-3xl font-display font-bold text-cargo-gradient mb-1">150+</p><p class="text-xs text-white/40">Countries Reached</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="py-20 lg:py-28 px-6 lg:px-10 bg-alt">
+      <div class="max-w-[1200px] mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">What We Stand For</p>
+          <h2 class="text-4xl font-display font-bold leading-tight reveal delay-100">Principles that don't bend<span class="block text-white/25">under deadline pressure.</span></h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="glass rounded-2xl p-7 hover-lift transition-all reveal">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-cargo-500/20" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(180,83,9,0.08));"><i class="fas fa-eye text-cargo-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Radical Transparency</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Every fee, every checkpoint, visible before you ask.</p>
+          </div>
+          <div class="glass rounded-2xl p-7 hover-lift transition-all reveal delay-100">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-bolt text-sky-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Relentless Speed</h3>
+            <p class="text-white/40 text-sm leading-relaxed">Every process is measured against how much faster it could be.</p>
+          </div>
+          <div class="glass rounded-2xl p-7 hover-lift transition-all reveal delay-200">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-handshake text-violet-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Accountability</h3>
+            <p class="text-white/40 text-sm leading-relaxed">If something goes wrong, we say so first — and fix it fast.</p>
+          </div>
+          <div class="glass rounded-2xl p-7 hover-lift transition-all reveal delay-300">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-leaf text-emerald-400"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">Responsible Routing</h3>
+            <p class="text-white/40 text-sm leading-relaxed">We consolidate loads and optimize routes to cut wasted miles.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 lg:px-10 bg-mid">
+      <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Want to move freight with us?</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Create a free account and get your first quote in minutes.</p>
+        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          Get Started <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    {% include 'partials/public_footer.html' %}
+    {% include 'partials/scripts_public.html' %}
+  </body>
+</html>

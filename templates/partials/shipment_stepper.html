@@ -1,0 +1,40 @@
+{% load shipping_extras %}
+{% if shipment.status == 'CANCELLED' %}
+<div class="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3.5">
+  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-red-500/15 border border-red-500/30 flex-shrink-0">
+    <i class="fas fa-xmark text-red-400"></i>
+  </div>
+  <div>
+    <p class="text-sm font-bold text-white">Shipment Cancelled</p>
+    <p class="text-xs text-white/40">This shipment is no longer moving through the network.</p>
+  </div>
+</div>
+{% else %}
+<div>
+  {% for stage in shipment|stage_states %}
+  <div class="flex gap-4">
+    <div class="flex flex-col items-center">
+      <div class="relative w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
+        {% if stage.state == 'upcoming' %}bg-white/5 border border-white/10
+        {% else %}bg-gradient-to-br from-cargo-400 to-cargo-600{% if stage.state == 'current' %} shadow-lg shadow-cargo-500/30{% endif %}{% endif %}">
+        {% if stage.state == 'current' %}
+        <span class="absolute inset-0 rounded-full bg-cargo-400 animate-ping opacity-40"></span>
+        {% endif %}
+        <i class="fas {{ stage.icon }} text-xs relative z-10 {% if stage.state == 'upcoming' %}text-white/25{% else %}text-ink-950{% endif %}"></i>
+      </div>
+      {% if not forloop.last %}
+      <div class="w-0.5 flex-1 min-h-[26px] {% if stage.state == 'completed' %}bg-gradient-to-b from-cargo-500 to-cargo-500/25{% else %}bg-white/10{% endif %}"></div>
+      {% endif %}
+    </div>
+    <div class="{% if not forloop.last %}pb-6{% endif %} flex-1 flex items-center justify-between gap-2 min-w-0">
+      <p class="text-sm font-semibold truncate {% if stage.state == 'upcoming' %}text-white/30{% else %}text-white{% endif %}">{{ stage.label }}</p>
+      {% if stage.state == 'current' %}
+      <span class="flex-shrink-0 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-cargo-500/15 text-cargo-300 border border-cargo-500/30">Current</span>
+      {% elif stage.state == 'completed' %}
+      <i class="fas fa-check text-cargo-400 text-xs flex-shrink-0"></i>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

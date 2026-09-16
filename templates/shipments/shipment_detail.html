@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load shipping_extras %}
+
+{% block page_title %}{{ shipment.tracking_number }}{% endblock %}
+{% block page_description %}Booked {{ shipment.created_at|date:"M d, Y" }}{% endblock %}
+
+{% block content %}
+<div>
+  <div class="flex items-center gap-2 mb-6 text-sm">
+    <a href="{% url 'shipment_list' %}" class="text-white/40 hover:text-white"><i class="fas fa-arrow-left mr-1.5"></i>My Shipments</a>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- SUMMARY -->
+      <div class="glass rounded-2xl p-6 lg:p-8">
+        <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+          <div>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-1">Tracking Number</p>
+            <p class="text-2xl font-display font-bold font-mono text-white">{{ shipment.tracking_number }}</p>
+          </div>
+          <span class="px-4 py-2 rounded-full text-sm font-bold border {{ shipment.status|status_badge }}">
+            <i class="fas {{ shipment.status|status_icon }} mr-1.5"></i>{{ shipment.get_status_display }}
+          </span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="rounded-xl border border-white/8 p-4">
+            <p class="text-xs font-bold text-white/40 uppercase tracking-wide mb-2"><i class="fas fa-location-dot text-cargo-400 mr-1"></i>Sender</p>
+            <p class="font-semibold text-white text-sm">{{ shipment.sender_name }}</p>
+            <p class="text-sm text-white/45">{{ shipment.sender_address }}</p>
+            <p class="text-sm text-white/45">{{ shipment.sender_city }}, {{ shipment.sender_country }}</p>
+            <p class="text-sm text-white/35 mt-1">{{ shipment.sender_phone }}</p>
+          </div>
+          <div class="rounded-xl border border-white/8 p-4">
+            <p class="text-xs font-bold text-white/40 uppercase tracking-wide mb-2"><i class="fas fa-flag-checkered text-cargo-400 mr-1"></i>Recipient</p>
+            <p class="font-semibold text-white text-sm">{{ shipment.recipient_name }}</p>
+            <p class="text-sm text-white/45">{{ shipment.recipient_address }}</p>
+            <p class="text-sm text-white/45">{{ shipment.recipient_city }}, {{ shipment.recipient_country }}</p>
+            <p class="text-sm text-white/35 mt-1">{{ shipment.recipient_phone }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROUTE MAP -->
+      {% include 'partials/shipment_route.html' %}
+
+      <!-- TIMELINE -->
+      <div class="glass rounded-2xl p-6 lg:p-8">
+        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-6">Shipment Journey</h3>
+        {% for event in events %}
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center border {{ event.status|status_badge }} flex-shrink-0"><i class="fas {{ event.status|status_icon }} text-xs"></i></div>
+            {% if not forloop.last %}<div class="w-px flex-1 bg-white/10 my-1"></div>{% endif %}
+          </div>
+          <div class="pb-8 flex-1">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="font-semibold text-white text-sm">{{ event.get_status_display }}</p>
+              <p class="text-xs text-white/35">{{ event.timestamp|date:"M d, Y — H:i" }}</p>
+            </div>
+            <p class="text-sm text-white/45 mt-1">{{ event.location }}</p>
+            {% if event.note %}<p class="text-xs text-white/30 mt-1">{{ event.note }}</p>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="space-y-6">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-5">Progress</h3>
+        {% include 'partials/shipment_stepper.html' %}
+      </div>
+
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Payment</h3>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-white/50 text-sm">Shipping Cost</span>
+          <span class="text-2xl font-display font-bold text-white">${{ shipment.shipping_cost }}</span>
+        </div>
+        <div class="flex items-center justify-between mb-5">
+          <span class="text-white/50 text-sm">Status</span>
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border {{ shipment.payment_status|status_badge }}">{{ shipment.get_payment_status_display }}</span>
+        </div>
+        {% if shipment.payment_status == 'UNPAID' %}
+        <form method="post" action="{% url 'shipment_pay' shipment.tracking_number %}">
+          {% csrf_token %}
+          <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/15">
+            <i class="fas fa-credit-card mr-2"></i>Pay Now
+          </button>
+        </form>
+        {% endif %}
+      </div>
+
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Package Details</h3>
+        <dl class="space-y-3 text-sm">
+          <div class="flex justify-between"><dt class="text-white/40">Service</dt><dd class="text-white font-medium">{{ shipment.get_service_type_display }}</dd></div>
+          <div class="flex justify-between"><dt class="text-white/40">Type</dt><dd class="text-white font-medium">{{ shipment.get_package_type_display }}</dd></div>
+          <div class="flex justify-between"><dt class="text-white/40">Weight</dt><dd class="text-white font-medium">{{ shipment.weight_kg }} kg</dd></div>
+          <div class="flex justify-between"><dt class="text-white/40">Dimensions</dt><dd class="text-white font-medium">{{ shipment.length_cm }}&times;{{ shipment.width_cm }}&times;{{ shipment.height_cm }} cm</dd></div>
+          <div class="flex justify-between"><dt class="text-white/40">Declared Value</dt><dd class="text-white font-medium">${{ shipment.declared_value }}</dd></div>
+          <div class="flex justify-between"><dt class="text-white/40">Insured</dt><dd class="text-white font-medium">{% if shipment.is_insured %}<i class="fas fa-circle-check text-emerald-400"></i>{% else %}<i class="fas fa-circle-xmark text-white/25"></i>{% endif %}</dd></div>
+          {% if shipment.description %}<div class="flex justify-between gap-4"><dt class="text-white/40 flex-shrink-0">Contents</dt><dd class="text-white font-medium text-right">{{ shipment.description }}</dd></div>{% endif %}
+        </dl>
+      </div>
+
+      <a href="{% url 'support_ticket_create' %}?shipment={{ shipment.id }}" class="flex items-center justify-center gap-2 rounded-2xl p-4 border border-white/10 text-white/50 hover:text-cargo-300 hover:border-cargo-500/30 transition-all text-sm font-semibold">
+        <i class="fas fa-headset"></i>Report an issue with this shipment
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load shipping_extras %}
+
+{% block page_description %}Every shipment, across every customer{% endblock %}
+
+{% block content %}
+<div>
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <form method="get" class="flex-1 min-w-[220px] max-w-md">
+      <div class="relative">
+        <i class="fas fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-white/25 text-sm"></i>
+        <input type="text" name="q" value="{{ query }}" placeholder="Search tracking #, customer, recipient..."
+               class="w-full rounded-xl bg-white/5 border border-white/10 pl-11 pr-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-cargo-500/40 focus:border-cargo-500/60 transition-all" />
+        {% if selected_status %}<input type="hidden" name="status" value="{{ selected_status }}">{% endif %}
+        {% if selected_payment %}<input type="hidden" name="payment" value="{{ selected_payment }}">{% endif %}
+      </div>
+    </form>
+    <a href="{% url 'admin_shipment_create' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/15">
+      <i class="fas fa-plus mr-2"></i>Create Shipment
+    </a>
+  </div>
+
+  {% if selected_payment %}
+  <div class="mb-4">
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-cargo-500/15 text-cargo-300 border border-cargo-500/30">
+      Payment: {{ selected_payment|title }}
+      <a href="?{% if selected_status %}status={{ selected_status }}{% endif %}" class="hover:text-white"><i class="fas fa-xmark"></i></a>
+    </span>
+  </div>
+  {% endif %}
+
+  <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
+    <a href="?{% if query %}q={{ query }}{% endif %}" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all {% if not selected_status %}bg-cargo-500/15 text-cargo-300 border-cargo-500/30{% else %}text-white/45 border-white/10 hover:border-white/25{% endif %}">All</a>
+    {% for value, label in status_choices %}
+    <a href="?status={{ value }}{% if query %}&q={{ query }}{% endif %}" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all {% if selected_status == value %}bg-cargo-500/15 text-cargo-300 border-cargo-500/30{% else %}text-white/45 border-white/10 hover:border-white/25{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  {% if shipments %}
+  <div class="glass rounded-2xl divide-y divide-white/5">
+    {% for shipment in shipments %}
+    <a href="{% url 'admin_shipment_detail' shipment.tracking_number %}" class="flex items-center gap-4 p-4 lg:p-5 hover:bg-white/[0.03] transition-colors">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-cargo-500/20 to-cargo-700/10">
+        <i class="fas {{ shipment.service_type|service_icon }} text-cargo-400"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <p class="font-semibold text-white text-sm font-mono truncate">{{ shipment.tracking_number }}</p>
+        </div>
+        <p class="text-xs text-white/40 truncate">{{ shipment.user.get_full_name }} &middot; {{ shipment.user.email }}</p>
+      </div>
+      <div class="hidden md:block text-xs text-white/45 flex-shrink-0 w-40 truncate">
+        {{ shipment.sender_city }} <i class="fas fa-arrow-right-long text-white/20 mx-1"></i> {{ shipment.recipient_city }}
+      </div>
+      <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border flex-shrink-0 {{ shipment.status|status_badge }}">{{ shipment.get_status_display }}</span>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border flex-shrink-0 hidden sm:inline-block {{ shipment.payment_status|status_badge }}">{{ shipment.get_payment_status_display }}</span>
+      <span class="text-sm font-bold text-white flex-shrink-0 w-16 text-right">${{ shipment.shipping_cost }}</span>
+      <i class="fas fa-chevron-right text-white/20 flex-shrink-0"></i>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass rounded-2xl p-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4"><i class="fas fa-boxes-stacked text-white/25 text-2xl"></i></div>
+    <p class="text-white/50 mb-4">No shipments match your filters</p>
+    <a href="{% url 'admin_shipment_create' %}" class="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500"><i class="fas fa-plus mr-2"></i>Create a Shipment</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

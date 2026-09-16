@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block page_description %}Your account details{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl space-y-6">
+  <div class="glass rounded-2xl p-6 lg:p-8">
+    <div class="flex flex-wrap items-center gap-5">
+      {% if user.profile_image %}
+      <img src="{{ user.profile_image.url }}" class="w-20 h-20 rounded-2xl object-cover" alt="">
+      {% else %}
+      <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold text-ink-950 bg-gradient-to-br from-cargo-400 to-cargo-600">{{ user.initials }}</div>
+      {% endif %}
+      <div class="flex-1 min-w-0">
+        <h2 class="text-xl font-bold text-white">{{ user.get_full_name }}</h2>
+        <p class="text-sm text-white/40">{{ user.email }}</p>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border
+            {% if user.account_status == 'ACTIVE' %}bg-emerald-500/15 text-emerald-300 border-emerald-500/25
+            {% else %}bg-amber-500/15 text-amber-300 border-amber-500/25{% endif %}">{{ user.get_account_status_display }}</span>
+          <span class="text-xs text-white/30 font-mono">{{ user.customer_id }}</span>
+        </div>
+      </div>
+      <a href="{% url 'profile_edit' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white/80 border border-white/15 hover:bg-white/5 transition-all"><i class="fas fa-pen mr-2"></i>Edit Profile</a>
+    </div>
+  </div>
+
+  <div class="grid sm:grid-cols-2 gap-6">
+    <div class="glass rounded-2xl p-6">
+      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Contact</h3>
+      <dl class="space-y-3 text-sm">
+        <div class="flex justify-between"><dt class="text-white/40">Phone</dt><dd class="text-white font-medium">{{ user.phone_number|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-white/40">Company</dt><dd class="text-white font-medium">{{ user.company_name|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-white/40">Account Type</dt><dd class="text-white font-medium">{{ user.get_customer_type_display }}</dd></div>
+      </dl>
+    </div>
+    <div class="glass rounded-2xl p-6">
+      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Default Address</h3>
+      <dl class="space-y-3 text-sm">
+        <div class="flex justify-between gap-4"><dt class="text-white/40 flex-shrink-0">Address</dt><dd class="text-white font-medium text-right">{{ user.address_line1|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-white/40">City</dt><dd class="text-white font-medium">{{ user.city|default:"—" }}</dd></div>
+        <div class="flex justify-between"><dt class="text-white/40">Country</dt><dd class="text-white font-medium">{{ user.country|default:"—" }}</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="glass rounded-2xl p-6 flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <h3 class="text-sm font-bold text-white mb-1">Password</h3>
+      <p class="text-xs text-white/40">Last changed — keep your account secure.</p>
+    </div>
+    <a href="{% url 'change_password' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white/80 border border-white/15 hover:bg-white/5 transition-all"><i class="fas fa-lock mr-2"></i>Change Password</a>
+  </div>
+</div>
+{% endblock %}

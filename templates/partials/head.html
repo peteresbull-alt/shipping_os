@@ -1,0 +1,152 @@
+{% load static %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0F1E" />
+<meta name="description" content="{% block meta_description %}Fracht Express — ultra-fast global freight, express air, ocean and road shipping with real-time tracking.{% endblock %}" />
+<meta name="robots" content="index, follow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23F59E0B'/%3E%3Cpath d='M20 62 L46 30 L80 30 L54 62 Z M20 62 L54 62 L46 74 L20 74 Z' fill='%230A0F1E'/%3E%3C/svg%3E" />
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+          display: ["Space Grotesk", "Inter", "sans-serif"],
+        },
+        colors: {
+          ink: {
+            950: "#04070F",
+            900: "#080D1A",
+            850: "#0A1120",
+            800: "#0F1830",
+            700: "#16213D",
+            600: "#1E2C4D",
+            500: "#2A3B63",
+          },
+          cargo: {
+            300: "#FCD34D",
+            400: "#FBBF24",
+            500: "#F59E0B",
+            600: "#D97706",
+            700: "#B45309",
+          },
+          mist: "#AEB9D4",
+        },
+      },
+    },
+  };
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "Inter", sans-serif; background: #04070F; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #080D1A; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #FBBF24, #D97706); border-radius: 3px; }
+
+  .font-display { font-family: "Space Grotesk", "Inter", sans-serif; }
+
+  .text-cargo-gradient {
+    background: linear-gradient(135deg, #FDE68A 0%, #FBBF24 45%, #F59E0B 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.035);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .grid-pattern {
+    background-image: linear-gradient(rgba(245,158,11,1) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,1) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: 0.035;
+  }
+  .dot-pattern {
+    background-image: radial-gradient(circle, #F59E0B 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: 0.03;
+  }
+
+  .route-line {
+    stroke-dasharray: 6 6;
+    animation: dash 30s linear infinite;
+  }
+  @keyframes dash { to { stroke-dashoffset: -400; } }
+
+  .hover-lift { transition: transform .4s cubic-bezier(.23,1,.32,1), box-shadow .4s ease, border-color .4s ease; }
+  .hover-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.55); }
+
+  .underline-hover { position: relative; }
+  .underline-hover::after {
+    content: ""; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px;
+    background: #FBBF24; transition: width .3s ease;
+  }
+  .underline-hover:hover::after { width: 100%; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-100 { transition-delay: .1s; } .delay-200 { transition-delay: .2s; }
+  .delay-300 { transition-delay: .3s; } .delay-400 { transition-delay: .4s; } .delay-500 { transition-delay: .5s; }
+
+  @keyframes float-up { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+  .float-card { animation: float-up 6s ease-in-out infinite; }
+  .float-card-delayed { animation: float-up 7s ease-in-out 1s infinite; }
+
+  @keyframes ping-slow { 0% { transform: scale(1); opacity:.6;} 75%,100% { transform: scale(2); opacity:0;} }
+  .animate-ping-slow { animation: ping-slow 3s cubic-bezier(0,0,.2,1) infinite; }
+
+  @keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+  .animate-marquee { animation: marquee 40s linear infinite; }
+
+  @keyframes shimmer { 0% { background-position: -200% 0;} 100% { background-position: 200% 0;} }
+  .badge-shimmer {
+    background: linear-gradient(90deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.22) 50%, rgba(245,158,11,0.08) 100%);
+    background-size: 200% 100%; animation: shimmer 2.5s infinite;
+  }
+
+  .gradient-border-anim { position: relative; isolation: isolate; }
+  .gradient-border-anim::before {
+    content: ""; position: absolute; inset: -1px; background: linear-gradient(135deg, #F59E0B, #B45309, #F59E0B);
+    background-size: 200% 200%; border-radius: inherit; z-index: -1;
+    animation: gradient-border-spin 4s linear infinite; opacity: 0; transition: opacity .3s;
+  }
+  @keyframes gradient-border-spin { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+  .gradient-border-anim:hover::before { opacity: .35; }
+
+  #mobileMenu { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .4s ease, opacity .3s ease; }
+  #mobileMenu.open { max-height: 500px; opacity: 1; }
+
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  .faq-answer.open { max-height: 320px; }
+
+  .step-connector { display: none; }
+  @media (min-width: 1024px) {
+    .step-connector { display: block; position: absolute; top: 64px; left: 50%; width: 100%; height: 1px; background: linear-gradient(90deg, rgba(245,158,11,.35), transparent); }
+  }
+
+  @media (max-width: 640px) {
+    .text-7xl, .text-8xl { font-size: 2.6rem !important; line-height: 1.08 !important; }
+    .text-6xl { font-size: 2.1rem !important; }
+    .text-5xl { font-size: 1.85rem !important; }
+  }
+</style>

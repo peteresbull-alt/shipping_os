@@ -1,0 +1,44 @@
+{% load static %}
+<footer class="pt-16 pb-8 px-6 lg:px-10 border-t border-white/5 bg-ink-950">
+  <div class="max-w-[1400px] mx-auto">
+    <div class="grid md:grid-cols-5 gap-10 mb-12">
+      <div class="md:col-span-2">
+        {% include 'partials/logo.html' %}
+        <p class="text-white/35 text-sm mt-4 max-w-xs leading-relaxed">Global freight forwarding built for speed, transparency and total visibility.</p>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-white mb-4">Company</p>
+        <ul class="space-y-2.5 text-sm text-white/40">
+          <li><a href="{% url 'about' %}" class="hover:text-cargo-400 transition-colors">About Us</a></li>
+          <li><a href="{% url 'services' %}" class="hover:text-cargo-400 transition-colors">Services</a></li>
+          <li><a href="{% url 'how_it_works' %}" class="hover:text-cargo-400 transition-colors">How It Works</a></li>
+          <li><a href="{% url 'contact' %}" class="hover:text-cargo-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-white mb-4">Resources</p>
+        <ul class="space-y-2.5 text-sm text-white/40">
+          <li><a href="{% url 'track' %}" class="hover:text-cargo-400 transition-colors">Track a Shipment</a></li>
+          <li><a href="{% url 'faq' %}" class="hover:text-cargo-400 transition-colors">FAQ</a></li>
+          <li><a href="{% url 'login' %}" class="hover:text-cargo-400 transition-colors">Sign In</a></li>
+          <li><a href="{% url 'register' %}" class="hover:text-cargo-400 transition-colors">Get a Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-white mb-4">Get in touch</p>
+        <ul class="space-y-2.5 text-sm text-white/40">
+          <li class="flex items-center gap-2"><i class="fas fa-envelope text-cargo-400/70 w-4"></i>support@frachtexpress.com</li>
+          <li class="flex items-center gap-2"><i class="fas fa-phone text-cargo-400/70 w-4"></i>+1 (800) 555-0142</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-white/25">&copy; {% now "Y" %} Fracht Express. All rights reserved.</p>
+      <div class="flex items-center gap-5 text-white/30">
+        <a href="#" class="hover:text-cargo-400 transition-colors"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" class="hover:text-cargo-400 transition-colors"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="hover:text-cargo-400 transition-colors"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
