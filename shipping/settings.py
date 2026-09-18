@@ -224,4 +224,4 @@ else:
 # ============================================
 # APPLICATION SETTINGS
 # ============================================
-APP_NAME = 'Fracht Express'
+APP_NAME = 'NordFracht Express Delivery'

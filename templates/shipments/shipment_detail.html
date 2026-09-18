@@ -76,33 +76,12 @@
       </div>
 
       <div class="glass rounded-2xl p-6">
-        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Payment</h3>
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-white/50 text-sm">Shipping Cost</span>
-          <span class="text-2xl font-display font-bold text-white">${{ shipment.shipping_cost }}</span>
-        </div>
-        <div class="flex items-center justify-between mb-5">
-          <span class="text-white/50 text-sm">Status</span>
-          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border {{ shipment.payment_status|status_badge }}">{{ shipment.get_payment_status_display }}</span>
-        </div>
-        {% if shipment.payment_status == 'UNPAID' %}
-        <form method="post" action="{% url 'shipment_pay' shipment.tracking_number %}">
-          {% csrf_token %}
-          <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/15">
-            <i class="fas fa-credit-card mr-2"></i>Pay Now
-          </button>
-        </form>
-        {% endif %}
-      </div>
-
-      <div class="glass rounded-2xl p-6">
         <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Package Details</h3>
         <dl class="space-y-3 text-sm">
           <div class="flex justify-between"><dt class="text-white/40">Service</dt><dd class="text-white font-medium">{{ shipment.get_service_type_display }}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Type</dt><dd class="text-white font-medium">{{ shipment.get_package_type_display }}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Weight</dt><dd class="text-white font-medium">{{ shipment.weight_kg }} kg</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Dimensions</dt><dd class="text-white font-medium">{{ shipment.length_cm }}&times;{{ shipment.width_cm }}&times;{{ shipment.height_cm }} cm</dd></div>
-          <div class="flex justify-between"><dt class="text-white/40">Declared Value</dt><dd class="text-white font-medium">${{ shipment.declared_value }}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Insured</dt><dd class="text-white font-medium">{% if shipment.is_insured %}<i class="fas fa-circle-check text-emerald-400"></i>{% else %}<i class="fas fa-circle-xmark text-white/25"></i>{% endif %}</dd></div>
           {% if shipment.description %}<div class="flex justify-between gap-4"><dt class="text-white/40 flex-shrink-0">Contents</dt><dd class="text-white font-medium text-right">{{ shipment.description }}</dd></div>{% endif %}
         </dl>

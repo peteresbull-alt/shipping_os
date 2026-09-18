@@ -19,10 +19,8 @@
           <i class="fas fa-gauge-high mr-2"></i>Dashboard
         </a>
         {% else %}
-        <a href="{% url 'login' %}" class="hidden sm:inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white/80 hover:text-white border border-white/10 hover:border-white/25 rounded-full transition-all">Sign In</a>
-        <a href="{% url 'register' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-lg shadow-cargo-500/20">
-          Get a Quote
-          <svg class="ml-1.5 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+        <a href="{% url 'track' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-lg shadow-cargo-500/20">
+          <i class="fas fa-location-crosshairs mr-2"></i>Track a Shipment
         </a>
         {% endif %}
         <button class="lg:hidden p-2 text-white/60" onclick="toggleMenu()"><i class="fas fa-bars text-xl"></i></button>
@@ -38,9 +36,8 @@
       <a href="{% url 'faq' %}" class="block px-4 py-3 text-sm font-medium text-white/70 hover:bg-white/5 rounded-xl">FAQ</a>
       <a href="{% url 'contact' %}" class="block px-4 py-3 text-sm font-medium text-white/70 hover:bg-white/5 rounded-xl">Contact</a>
       {% if not user.is_authenticated %}
-      <div class="pt-4 border-t border-white/10 grid grid-cols-2 gap-3">
-        <a href="{% url 'login' %}" class="flex items-center justify-center px-4 py-3 text-sm font-semibold text-white border border-white/20 rounded-full">Sign In</a>
-        <a href="{% url 'register' %}" class="flex items-center justify-center px-4 py-3 text-sm font-bold text-ink-950 bg-cargo-400 rounded-full">Get a Quote</a>
+      <div class="pt-4 border-t border-white/10">
+        <a href="{% url 'track' %}" class="flex items-center justify-center px-4 py-3 text-sm font-bold text-ink-950 bg-cargo-400 rounded-full"><i class="fas fa-location-crosshairs mr-2"></i>Track a Shipment</a>
       </div>
       {% endif %}
     </div>

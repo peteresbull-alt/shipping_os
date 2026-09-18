@@ -9,8 +9,8 @@ from django.utils import timezone
 
 from .decorators import staff_required
 from .forms import (
-    AddressForm, AdminShipmentForm, ChangePasswordForm, ContactForm, NewsletterForm,
-    ProfileForm, RegisterForm, SupportTicketForm, TrackingEventForm,
+    AddressForm, AdminShipmentEditForm, AdminShipmentForm, ChangePasswordForm, ContactForm,
+    NewsletterForm, ProfileForm, RegisterForm, SupportTicketForm, TrackingEventEditForm, TrackingEventForm,
 )
 from .models import (
     Address, ContactMessage, CustomUser, NewsletterSubscriber, Notification,
@@ -48,16 +48,16 @@ def calculate_shipping_cost(service_type, weight_kg, length_cm, width_cm, height
 # ============================================
 
 FAQS = [
-    ('How fast is Express Air delivery?', 'Most Express Air shipments arrive within 48 hours door-to-door, depending on origin and destination customs processing.'),
-    ('Do you offer real-time tracking?', 'Yes — every shipment gets a tracking number with live checkpoint updates from pickup to final delivery, visible to you at every step.'),
-    ('What happens if my package is delayed?', "We proactively flag delays on your dashboard and notify you immediately, with our support team on standby to help re-route or expedite."),
-    ('Can I insure high-value cargo?', 'Yes, optional insurance is available at booking for a small percentage of the declared value, covering loss or damage in transit.'),
+    ('How do I track my consignment?', 'Enter your tracking number on our Track page — no account or sign-up needed. You’ll see the current status, current location, and the full journey history.'),
+    ('Where do I find my tracking number?', 'NordFracht Express Delivery issues a unique tracking number as soon as your consignment is booked into our network. It’s provided directly by our team when your shipment is arranged.'),
+    ('How fast is Express Air delivery?', 'Most Express Air consignments arrive within 48 hours door-to-door, depending on origin and destination customs processing.'),
+    ('Do you offer real-time tracking?', 'Yes — every consignment gets a tracking number with live checkpoint updates from pickup to final delivery, visible to you at every step.'),
+    ('What happens if my consignment is delayed?', 'We proactively flag delays on the tracking timeline and our support team is on standby to help resolve it — just reach out via our Contact page with your tracking number.'),
+    ('Can high-value cargo be insured?', 'Yes, optional insurance can be arranged when your shipment is booked, covering loss or damage in transit.'),
     ('Do you handle customs clearance?', 'Our in-house brokerage manages documentation and clearance for international shipments so your cargo keeps moving without delay.'),
-    ('How is my shipping cost calculated?', "We price by service type plus chargeable weight — the greater of actual weight and volumetric weight (L x W x H / 5000). Optional insurance adds a small percentage of your declared value."),
-    ('Can I ship internationally to any country?', 'We currently serve 150+ countries across air, ocean and road networks. If your destination isn’t listed at checkout, reach out to our team and we’ll confirm availability.'),
-    ('What items can’t be shipped?', "Hazardous materials, illegal goods, and live animals are restricted on our network. Fragile and high-value items are welcome — just flag them at booking so we can handle them with care."),
-    ('How do I pay for a shipment?', "Once you book a shipment, a 'Pay Now' action appears on the shipment detail page. Payment is confirmed instantly and your package moves to pickup."),
-    ('Can I cancel a shipment after booking?', "Yes, shipments can be cancelled from the shipment detail page as long as they haven't yet been picked up by a courier."),
+    ('Can you ship internationally to any country?', 'We serve 150+ countries across air, ocean and road networks. Reach out to our team to confirm availability for your destination.'),
+    ('What items can’t be shipped?', 'Hazardous materials, illegal goods, and live animals are restricted on our network. Fragile and high-value items are welcome — just flag them when arranging your shipment with our team.'),
+    ('What if my tracking number isn’t working?', 'Double-check the number for typos first. If it still doesn’t show results, contact our support team and we’ll look into it right away.'),
 ]
 
 
@@ -144,7 +144,7 @@ def register_view(request):
             Notification.objects.create(
                 user=user,
                 notification_type='SYSTEM',
-                title='Welcome to Fracht Express',
+                title='Welcome to NordFracht Express Delivery',
                 message='Your account has been created. Book your first shipment to get started.',
             )
             login(request, user)
@@ -195,8 +195,6 @@ def dashboard_view(request):
     active_shipments = shipments.exclude(status__in=['DELIVERED', 'CANCELLED'])
     delivered_shipments = shipments.filter(status='DELIVERED')
 
-    total_spent = shipments.filter(payment_status='PAID').aggregate(total=Sum('shipping_cost'))['total'] or Decimal('0.00')
-
     thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
     recent_shipments_count = shipments.filter(created_at__gte=thirty_days_ago).count()
 
@@ -206,7 +204,6 @@ def dashboard_view(request):
         'active_count': active_shipments.count(),
         'delivered_count': delivered_shipments.count(),
         'total_shipments': shipments.count(),
-        'total_spent': total_spent,
         'recent_shipments_count': recent_shipments_count,
         'in_transit': shipments.filter(status__in=['PICKED_UP', 'IN_TRANSIT', 'CUSTOMS', 'OUT_FOR_DELIVERY']).count(),
         'recent_events': TrackingEvent.objects.filter(shipment__user=request.user).select_related('shipment')[:6],
@@ -249,23 +246,6 @@ def shipment_detail_view(request, tracking_number):
         'shipment': shipment,
         'events': shipment.events.all(),
     })
-
-
-@login_required
-def shipment_pay_view(request, tracking_number):
-    shipment = get_object_or_404(Shipment, tracking_number=tracking_number, user=request.user)
-    if request.method == 'POST' and shipment.payment_status == 'UNPAID':
-        shipment.payment_status = 'PAID'
-        shipment.save(update_fields=['payment_status'])
-        Notification.objects.create(
-            user=request.user,
-            notification_type='BILLING',
-            title='Payment received',
-            message=f'Payment of ${shipment.shipping_cost} for shipment {shipment.tracking_number} was confirmed.',
-            shipment=shipment,
-        )
-        messages.success(request, 'Payment confirmed. Your shipment will be picked up shortly.')
-    return redirect('shipment_detail', tracking_number=shipment.tracking_number)
 
 
 # ============================================
@@ -356,6 +336,84 @@ def admin_shipment_detail_view(request, tracking_number):
         'events': shipment.events.all(),
         'event_form': event_form,
     })
+
+
+@staff_required
+def admin_shipment_edit_view(request, tracking_number):
+    """Full edit of an existing shipment's details — package, sender,
+    recipient, payment status, estimated delivery. This is separate from
+    posting a tracking update: that changes the shipment's *stage*, this
+    corrects its *details*."""
+    shipment = get_object_or_404(Shipment.objects.select_related('user'), tracking_number=tracking_number)
+
+    if request.method == 'POST':
+        form = AdminShipmentEditForm(request.POST, instance=shipment)
+        if form.is_valid():
+            shipment = form.save(commit=False)
+            cost, chargeable_weight, insurance_fee = calculate_shipping_cost(
+                shipment.service_type, shipment.weight_kg, shipment.length_cm,
+                shipment.width_cm, shipment.height_cm, shipment.declared_value, shipment.is_insured,
+            )
+            shipment.shipping_cost = cost
+            shipment.save()
+            messages.success(request, f'Shipment {shipment.tracking_number} updated.')
+            return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
+    else:
+        form = AdminShipmentEditForm(instance=shipment)
+
+    return render(request, 'manage/shipment_edit.html', {
+        'title': f'Edit {shipment.tracking_number}',
+        'shipment': shipment,
+        'form': form,
+        'rate_card': {
+            'base': SERVICE_BASE_RATE, 'per_kg': SERVICE_PER_KG, 'eta': SERVICE_ETA_DAYS,
+            'insurance_rate': float(INSURANCE_RATE) * 100,
+        },
+    })
+
+
+@staff_required
+def admin_event_edit_view(request, tracking_number, event_id):
+    shipment = get_object_or_404(Shipment, tracking_number=tracking_number)
+    event = get_object_or_404(TrackingEvent, id=event_id, shipment=shipment)
+    original_timestamp = event.timestamp  # captured before the form mutates `event` in place
+
+    if request.method == 'POST':
+        form = TrackingEventEditForm(request.POST, instance=event)
+        if form.is_valid():
+            new_event = form.save(commit=False)
+            # The datetime-local input only round-trips to whole seconds. If
+            # the submitted value lands in the same second as what's already
+            # stored, keep the original microsecond-precise timestamp instead
+            # of silently truncating it — otherwise two checkpoints created
+            # moments apart could have their relative order flipped just by
+            # re-saving one of them without an intentional time change.
+            if new_event.timestamp.replace(microsecond=0) == original_timestamp.replace(microsecond=0):
+                new_event.timestamp = original_timestamp
+            new_event.save()  # syncs shipment.status/current_location/delivered_at automatically
+            messages.success(request, 'Tracking checkpoint updated.')
+            return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
+    else:
+        form = TrackingEventEditForm(instance=event)
+
+    return render(request, 'manage/event_edit.html', {
+        'title': f'Edit Checkpoint · {shipment.tracking_number}',
+        'shipment': shipment,
+        'event': event,
+        'form': form,
+    })
+
+
+@staff_required
+def admin_event_delete_view(request, tracking_number, event_id):
+    shipment = get_object_or_404(Shipment, tracking_number=tracking_number)
+    event = get_object_or_404(TrackingEvent, id=event_id, shipment=shipment)
+
+    if request.method == 'POST':
+        event.delete()
+        shipment.sync_from_latest_event()
+        messages.success(request, 'Tracking checkpoint removed.')
+    return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
 
 
 @staff_required

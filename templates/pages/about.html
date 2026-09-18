@@ -3,7 +3,7 @@
 <html lang="en" class="h-full">
   <head>
     {% include 'partials/head.html' %}
-    <title>About Us · Fracht Express</title>
+    <title>About Us · NordFracht Express Delivery</title>
     <style>
       .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
       .bg-mid { background: #070B15; }
@@ -23,7 +23,7 @@
           Moving the world's goods,<span class="block text-cargo-gradient">one shipment at a time.</span>
         </h1>
         <p class="text-lg text-white/45 leading-relaxed max-w-2xl mx-auto reveal delay-200">
-          Fracht Express was built on a simple idea: freight forwarding should be fast, transparent, and never leave you guessing where your cargo is.
+          NordFracht Express Delivery was built on a simple idea: freight forwarding should be fast, transparent, and never leave you guessing where your cargo is.
         </p>
       </div>
     </section>
@@ -32,10 +32,10 @@
     <section class="py-20 lg:py-28 px-6 lg:px-10 bg-mid">
       <div class="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-14 items-center">
         <div class="reveal">
-          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4">From Frustration to Fracht Express</p>
+          <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4">From Frustration to NordFracht Express Delivery</p>
           <h2 class="text-3xl lg:text-4xl font-display font-bold leading-tight mb-6">We got tired of freight forwarders that hide the ball.</h2>
           <div class="space-y-4 text-white/45 leading-relaxed">
-            <p>Fracht Express started with a straightforward frustration: booking a shipment shouldn't require five phone calls, and knowing where your cargo is shouldn't require a favor from a warehouse manager.</p>
+            <p>NordFracht Express Delivery started with a straightforward frustration: booking a shipment shouldn't require five phone calls, and knowing where your cargo is shouldn't require a favor from a warehouse manager.</p>
             <p>So we built a platform that puts the entire shipping lifecycle — quoting, booking, payment, and live tracking — into one dashboard. No black boxes, no surprise fees, no "let me check and call you back."</p>
             <p>Today we move freight by air, sea and road across 150+ countries, backed by a network of regional hubs and an in-house customs desk that keeps cargo moving instead of sitting in a queue.</p>
           </div>
@@ -49,8 +49,24 @@
       </div>
     </section>
 
-    <!-- VALUES -->
+    <!-- OPERATIONS PHOTO -->
     <section class="py-20 lg:py-28 px-6 lg:px-10 bg-alt">
+      <div class="max-w-[1200px] mx-auto reveal">
+        <div class="relative rounded-3xl overflow-hidden">
+          <img src="{% static 'images/pexels-poopfishsocks-34161354.jpg' %}"
+               class="w-full h-[380px] lg:h-[480px] object-cover" style="object-position: 50% 30%;" alt="Crew members coordinating on deck at a NordFracht Express Delivery operation" loading="lazy">
+          <div class="absolute inset-0" style="background: linear-gradient(0deg, rgba(4,7,15,0.92) 0%, rgba(4,7,15,0.35) 45%, rgba(4,7,15,0.05) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-12">
+            <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-3">Behind Every Shipment</p>
+            <h3 class="text-2xl lg:text-3xl font-display font-bold text-white mb-2 max-w-lg">Real hubs. Real people. Real accountability.</h3>
+            <p class="text-white/55 text-sm max-w-md">Every shipment passes through hands that take it seriously — not just a tracking number on a screen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="py-20 lg:py-28 px-6 lg:px-10 bg-mid">
       <div class="max-w-[1200px] mx-auto">
         <div class="text-center max-w-2xl mx-auto mb-16">
           <p class="text-xs font-bold text-cargo-400 uppercase tracking-widest mb-4 reveal">What We Stand For</p>
@@ -82,14 +98,15 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-24 px-6 lg:px-10 bg-mid">
+    <section class="py-24 px-6 lg:px-10 bg-alt">
       <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Want to move freight with us?</h2>
-        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Create a free account and get your first quote in minutes.</p>
-        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
-          Get Started <i class="fas fa-arrow-right ml-2"></i>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Already shipping with us?</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Track your consignment in real time — no account required.</p>
+        <a href="{% url 'track' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          <i class="fas fa-location-crosshairs mr-2"></i>Track a Shipment
         </a>
+        <p class="text-sm text-white/30 mt-6 relative z-10">Want to ship with us? <a href="{% url 'contact' %}" class="text-cargo-400 hover:text-cargo-300 font-semibold">Contact our team</a>.</p>
       </div>
     </section>
 

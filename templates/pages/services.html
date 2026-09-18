@@ -3,7 +3,7 @@
 <html lang="en" class="h-full">
   <head>
     {% include 'partials/head.html' %}
-    <title>Services · Fracht Express</title>
+    <title>Services · NordFracht Express Delivery</title>
     <style>
       .hero-bg { background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(245,158,11,0.14) 0%, transparent 60%), #04070F; }
       .bg-mid { background: #070B15; }
@@ -23,7 +23,7 @@
           Every mode of freight,<span class="block text-cargo-gradient">one seamless platform.</span>
         </h1>
         <p class="text-lg text-white/45 leading-relaxed max-w-2xl mx-auto reveal delay-200">
-          From a single parcel to a full container load — book, pay and track it all from one dashboard.
+          From a single parcel to a full container load — every consignment is trackable in real time, from pickup to delivery.
         </p>
       </div>
     </section>
@@ -45,32 +45,45 @@
             </ul>
           </div>
           <div class="glass rounded-2xl p-6 text-center" style="background:rgba(245,158,11,0.06);">
-            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
-            <p class="text-4xl font-display font-bold text-cargo-gradient mb-1">$28<span class="text-base text-white/40">+ base</span></p>
-            <p class="text-xs text-white/35">plus $5.20/kg chargeable weight</p>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Average Transit</p>
+            <p class="text-4xl font-display font-bold text-cargo-gradient mb-1">48<span class="text-base text-white/40"> hrs</span></p>
+            <p class="text-xs text-white/35">door-to-door, priority handling</p>
           </div>
         </div>
 
-        <div class="glass rounded-3xl p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center reveal delay-100">
+        <div class="glass rounded-3xl overflow-hidden reveal delay-100">
+          <div class="relative h-48 lg:h-56">
+            <img src="{% static 'images/pexels-jefe-king-907960151-19926726.jpg' %}"
+                 class="w-full h-full object-cover" style="object-position: 50% 25%;" alt="Crew member securing container lashings on a vessel" loading="lazy">
+            <div class="absolute inset-0" style="background: linear-gradient(90deg, rgba(7,11,21,0.55) 0%, rgba(7,11,21,0.15) 60%);"></div>
+          </div>
+          <div class="p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center">
           <div class="lg:col-span-2">
             <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border border-sky-500/20" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(14,116,144,0.08));"><i class="fas fa-ship text-sky-400 text-lg"></i></div>
             <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3">Ocean Freight</h2>
-            <p class="text-white/45 leading-relaxed mb-5">FCL and LCL container shipping for high-volume, cost-efficient global trade. Consolidated loads reduce per-unit cost while keeping full visibility on vessel schedules and port handling.</p>
+            <p class="text-white/45 leading-relaxed mb-5">FCL and LCL container shipping for high-volume global trade, with full visibility on vessel schedules, port handling and every checkpoint in between.</p>
             <ul class="grid sm:grid-cols-2 gap-2.5 text-sm text-white/50">
               <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Full &amp; less-than-container loads</li>
-              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Lowest cost per kg at scale</li>
+              <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Built for high-volume trade</li>
               <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Port-to-port or door-to-door</li>
               <li class="flex items-center gap-2"><i class="fas fa-circle-check text-sky-400 text-xs"></i>Ideal for pallets &amp; bulk freight</li>
             </ul>
           </div>
           <div class="glass rounded-2xl p-6 text-center" style="background:rgba(56,189,248,0.06);">
-            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
-            <p class="text-4xl font-display font-bold text-white mb-1">$9<span class="text-base text-white/40">+ base</span></p>
-            <p class="text-xs text-white/35">plus $1.10/kg chargeable weight</p>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Built For</p>
+            <p class="text-2xl font-display font-bold text-white mb-1">FCL &amp; LCL</p>
+            <p class="text-xs text-white/35">port-to-port or door-to-door</p>
+          </div>
           </div>
         </div>
 
-        <div class="glass rounded-3xl p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center reveal delay-200">
+        <div class="glass rounded-3xl overflow-hidden reveal delay-200">
+          <div class="relative h-48 lg:h-56">
+            <img src="https://images.pexels.com/photos/27099095/pexels-photo-27099095.jpeg?cs=srgb&fm=jpg&w=1600"
+                 class="w-full h-full object-cover" alt="Freight truck on the highway" loading="lazy">
+            <div class="absolute inset-0" style="background: linear-gradient(90deg, rgba(7,11,21,0.55) 0%, rgba(7,11,21,0.15) 60%);"></div>
+          </div>
+          <div class="p-8 lg:p-10 grid lg:grid-cols-3 gap-8 items-center">
           <div class="lg:col-span-2">
             <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border border-violet-500/20" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.08));"><i class="fas fa-truck-moving text-violet-400 text-lg"></i></div>
             <h2 class="text-2xl lg:text-3xl font-bold text-white mb-3">Road Freight</h2>
@@ -83,17 +96,25 @@
             </ul>
           </div>
           <div class="glass rounded-2xl p-6 text-center" style="background:rgba(139,92,246,0.06);">
-            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Starting from</p>
-            <p class="text-4xl font-display font-bold text-white mb-1">$11<span class="text-base text-white/40">+ base</span></p>
-            <p class="text-xs text-white/35">plus $1.65/kg chargeable weight</p>
+            <p class="text-xs text-white/40 uppercase tracking-wide mb-2">Coverage</p>
+            <p class="text-2xl font-display font-bold text-white mb-1">Cross-Border</p>
+            <p class="text-xs text-white/35">live GPS on every leg</p>
+          </div>
           </div>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-6">
-          <div class="glass rounded-3xl p-8 reveal delay-300">
-            <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-warehouse text-emerald-400"></i></div>
-            <h3 class="text-xl font-bold text-white mb-2">Warehousing &amp; Fulfillment</h3>
-            <p class="text-white/40 text-sm leading-relaxed">Store inventory in our regional hubs and let us pick, pack and ship on your behalf — with the same real-time visibility as every other shipment.</p>
+          <div class="glass rounded-3xl overflow-hidden reveal delay-300">
+            <div class="relative h-36">
+              <img src="https://images.pexels.com/photos/30824313/pexels-photo-30824313.jpeg?cs=srgb&fm=jpg&w=1200"
+                   class="w-full h-full object-cover" alt="Regional warehouse and fulfillment hub" loading="lazy">
+              <div class="absolute inset-0" style="background: linear-gradient(0deg, rgba(7,11,21,0.75) 0%, rgba(7,11,21,0.15) 100%);"></div>
+            </div>
+            <div class="p-8">
+              <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-emerald-500/20" style="background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(4,120,87,0.08));"><i class="fas fa-warehouse text-emerald-400"></i></div>
+              <h3 class="text-xl font-bold text-white mb-2">Warehousing &amp; Fulfillment</h3>
+              <p class="text-white/40 text-sm leading-relaxed">Store inventory in our regional hubs and let us pick, pack and ship on your behalf — with the same real-time visibility as every other shipment.</p>
+            </div>
           </div>
           <div class="glass rounded-3xl p-8 reveal delay-300">
             <div class="w-11 h-11 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/20" style="background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(180,83,9,0.08));"><i class="fas fa-passport text-amber-400"></i></div>
@@ -108,11 +129,12 @@
     <section class="py-24 px-6 lg:px-10 bg-alt">
       <div class="max-w-4xl mx-auto text-center glass rounded-3xl p-12 lg:p-16 border border-cargo-500/15 relative overflow-hidden reveal">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Get an instant quote</h2>
-        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Create a free account, enter your package details, and see your price before you book.</p>
-        <a href="{% url 'register' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
-          Get a Quote <i class="fas fa-arrow-right ml-2"></i>
+        <h2 class="text-4xl lg:text-5xl font-display font-bold text-white mb-5 relative z-10">Track your consignment</h2>
+        <p class="text-lg text-white/45 mb-8 max-w-xl mx-auto relative z-10">Enter your tracking number to see exactly where it is — no account required.</p>
+        <a href="{% url 'track' %}" class="inline-flex items-center px-10 py-4 text-base font-bold text-ink-950 bg-cargo-400 hover:bg-cargo-300 rounded-full transition-all shadow-xl shadow-cargo-500/20 hover:-translate-y-1 relative z-10">
+          <i class="fas fa-location-crosshairs mr-2"></i>Track a Shipment
         </a>
+        <p class="text-sm text-white/30 mt-6 relative z-10">Want to ship with us? <a href="{% url 'contact' %}" class="text-cargo-400 hover:text-cargo-300 font-semibold">Contact our team</a>.</p>
       </div>
     </section>
 

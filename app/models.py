@@ -16,7 +16,7 @@ from .managers import CustomUserManager
 # ============================================
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """Fracht Express customer / staff account."""
+    """NordFracht Express Delivery customer / staff account."""
 
     ACCOUNT_STATUS = [
         ('PENDING_VERIFICATION', 'Pending Verification'),
@@ -135,7 +135,7 @@ class Address(models.Model):
 # ============================================
 
 class Shipment(models.Model):
-    """A booked shipment / parcel moving through the Fracht Express network."""
+    """A booked shipment / parcel moving through the NordFracht Express Delivery network."""
 
     SERVICE_TYPES = [
         ('EXPRESS', 'Express Air'),
@@ -249,6 +249,25 @@ class Shipment(models.Model):
     def is_active(self):
         return self.status not in ('DELIVERED', 'CANCELLED')
 
+    def sync_from_latest_event(self):
+        """Recompute status/current_location/delivered_at from whichever
+        TrackingEvent is chronologically latest right now. Called after any
+        event is created, edited or deleted, so admin corrections (fixing a
+        typo'd location, deleting a bad entry, editing a timestamp) always
+        propagate correctly rather than only the most-recently-saved event
+        being trusted."""
+        latest = self.events.order_by('-timestamp', '-id').first()
+        if not latest:
+            return
+        self.status = latest.status
+        self.current_location = latest.location
+        if latest.status == 'DELIVERED':
+            if not self.delivered_at:
+                self.delivered_at = latest.timestamp
+        else:
+            self.delivered_at = None
+        self.save(update_fields=['status', 'current_location', 'delivered_at', 'updated_at'])
+
     @property
     def route_points(self):
         """Origin -> distinct waypoints from the tracking history -> destination,
@@ -308,20 +327,14 @@ class TrackingEvent(models.Model):
     class Meta:
         verbose_name = 'Tracking Event'
         verbose_name_plural = 'Tracking Events'
-        ordering = ['-timestamp']
+        ordering = ['-timestamp', '-id']
 
     def __str__(self):
         return f'{self.shipment.tracking_number} - {self.get_status_display()}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        latest = self.shipment.events.first()
-        if latest and latest.pk == self.pk:
-            self.shipment.status = self.status
-            self.shipment.current_location = self.location
-            if self.status == 'DELIVERED' and not self.shipment.delivered_at:
-                self.shipment.delivered_at = self.timestamp
-            self.shipment.save(update_fields=['status', 'current_location', 'delivered_at', 'updated_at'])
+        self.shipment.sync_from_latest_event()
 
 
 # ============================================

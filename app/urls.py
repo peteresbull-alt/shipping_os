@@ -29,11 +29,10 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
 
     # ============================================
-    # SHIPMENTS (customer — read-only + payment)
+    # SHIPMENTS (customer — read-only)
     # ============================================
     path('shipments/', views.shipment_list_view, name='shipment_list'),
     path('shipments/<str:tracking_number>/', views.shipment_detail_view, name='shipment_detail'),
-    path('shipments/<str:tracking_number>/pay/', views.shipment_pay_view, name='shipment_pay'),
 
     # ============================================
     # ADMIN / STAFF — shipment management
@@ -42,6 +41,9 @@ urlpatterns = [
     path('manage/shipments/', views.admin_shipment_list_view, name='admin_shipment_list'),
     path('manage/shipments/new/', views.admin_shipment_create_view, name='admin_shipment_create'),
     path('manage/shipments/<str:tracking_number>/', views.admin_shipment_detail_view, name='admin_shipment_detail'),
+    path('manage/shipments/<str:tracking_number>/edit/', views.admin_shipment_edit_view, name='admin_shipment_edit'),
+    path('manage/shipments/<str:tracking_number>/events/<int:event_id>/edit/', views.admin_event_edit_view, name='admin_event_edit'),
+    path('manage/shipments/<str:tracking_number>/events/<int:event_id>/delete/', views.admin_event_delete_view, name='admin_event_delete'),
 
     # ============================================
     # ADDRESS BOOK

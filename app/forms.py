@@ -134,6 +134,21 @@ class AdminShipmentForm(ShipmentForm):
     )
 
 
+class AdminShipmentEditForm(ShipmentForm):
+    """Staff-only: full edit of an existing shipment's details — everything
+    except who it belongs to and its tracking number. Payment status and
+    estimated delivery are editable here too, on top of the package/sender/
+    recipient fields ShipmentForm already covers."""
+
+    class Meta(ShipmentForm.Meta):
+        fields = ShipmentForm.Meta.fields + ['payment_status', 'estimated_delivery']
+        widgets = {
+            **ShipmentForm.Meta.widgets,
+            'payment_status': forms.Select(attrs={'class': SELECT}),
+            'estimated_delivery': forms.DateInput(attrs={'class': INPUT, 'type': 'date'}),
+        }
+
+
 class TrackingEventForm(forms.ModelForm):
     """Staff-only: posts a new checkpoint, which is how a shipment's status
     and location actually get updated (see TrackingEvent.save())."""
@@ -145,6 +160,19 @@ class TrackingEventForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': SELECT}),
             'location': forms.TextInput(attrs={'class': INPUT, 'placeholder': 'e.g. Hong Kong International Hub'}),
             'note': forms.TextInput(attrs={'class': INPUT, 'placeholder': 'Optional note for this checkpoint'}),
+        }
+
+
+class TrackingEventEditForm(TrackingEventForm):
+    """Staff-only: edits an existing checkpoint, including backdating/
+    correcting its timestamp (which determines whether it's treated as the
+    shipment's current stage — see Shipment.sync_from_latest_event())."""
+
+    class Meta(TrackingEventForm.Meta):
+        fields = TrackingEventForm.Meta.fields + ['timestamp']
+        widgets = {
+            **TrackingEventForm.Meta.widgets,
+            'timestamp': forms.DateTimeInput(attrs={'class': INPUT, 'type': 'datetime-local', 'step': '1'}, format='%Y-%m-%dT%H:%M:%S'),
         }
 
 
