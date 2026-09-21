@@ -1,3 +1,5 @@
+import math
+
 from django import template
 
 register = template.Library()
@@ -95,3 +97,58 @@ def stage_states(shipment):
             state = 'upcoming'
         stages.append({'key': key, 'label': STAGE_LABELS[key], 'icon': STATUS_ICON[key], 'state': state})
     return stages
+
+
+@register.simple_tag
+def route_map_data(shipment):
+    """Lays out shipment.route_points along a gentle flight-path curve for
+    the animated route-map diagram. There's no real geocoding in this app
+    (see route_points' docstring), so this is a stylized arc rather than
+    literal coordinates — each hop bows upward like a flight path, and
+    waypoints alternate above/below the baseline so labels never collide."""
+    points = shipment.route_points
+    n = len(points)
+    if n < 2:
+        return None
+
+    width, height = 1000, 240
+    margin_x = 70
+    baseline = height * 0.6
+    wave_amp = 50
+    arc_bow = 40
+
+    coords = []
+    for i, point in enumerate(points):
+        t = i / (n - 1)
+        x = margin_x + t * (width - 2 * margin_x)
+        if i == 0 or i == n - 1:
+            y = baseline
+        else:
+            y = baseline + wave_amp * math.sin(i * math.pi / 2)
+        coords.append({
+            **point,
+            'x': round(x, 1), 'y': round(y, 1),
+            'x_pct': round(x / width * 100, 2), 'y_pct': round(y / height * 100, 2),
+            'label_below': y >= baseline,
+            'is_first': i == 0,
+            'is_last': i == n - 1,
+        })
+
+    path_d = f"M{coords[0]['x']},{coords[0]['y']}"
+    for i in range(1, len(coords)):
+        x0, y0 = coords[i - 1]['x'], coords[i - 1]['y']
+        x1, y1 = coords[i]['x'], coords[i]['y']
+        cy = min(y0, y1) - arc_bow
+        cx0 = x0 + (x1 - x0) * 0.35
+        cx1 = x0 + (x1 - x0) * 0.65
+        path_d += f" C{cx0},{cy} {cx1},{cy} {x1},{y1}"
+
+    current = next((c for c in coords if c['current']), None) if shipment.is_active else None
+
+    return {
+        'points': coords,
+        'path': path_d,
+        'width': width,
+        'height': height,
+        'current': current,
+    }

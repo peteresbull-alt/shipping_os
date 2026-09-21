@@ -1,0 +1,66 @@
+{% load shipping_extras %}
+{% route_map_data shipment as map %}
+{% if map %}
+<div class="glass rounded-3xl p-6 lg:p-8 relative overflow-hidden">
+  <div class="absolute inset-0 dot-pattern pointer-events-none" style="opacity:0.05;"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[260px] bg-cargo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="relative flex flex-wrap items-center justify-between gap-3 mb-1">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide"><i class="fas fa-route text-cargo-400 mr-1.5"></i>Live Route Map</h3>
+    {% if shipment.status == 'CANCELLED' %}
+    <span class="text-xs font-semibold text-white/30">Route halted</span>
+    {% elif shipment.status == 'DELIVERED' %}
+    <span class="text-xs font-semibold text-emerald-400"><i class="fas fa-circle-check mr-1"></i>Arrived at destination</span>
+    {% else %}
+    <span class="text-xs font-semibold text-cargo-300"><i class="fas fa-location-crosshairs mr-1"></i>Currently at {{ shipment.current_location|default:shipment.sender_city }}</span>
+    {% endif %}
+  </div>
+  <p class="relative text-xs text-white/25 mb-8">Positions are illustrative — plotted from real tracking checkpoints, not live GPS</p>
+
+  <div class="relative overflow-x-auto -mx-2 px-2 pt-14 pb-14">
+    <div class="relative min-w-[480px] mx-auto" style="aspect-ratio: {{ map.width }} / {{ map.height }};">
+      <svg viewBox="0 0 {{ map.width }} {{ map.height }}" class="absolute inset-0 w-full h-full">
+        <defs>
+          <linearGradient id="routeGrad-{{ shipment.tracking_number }}" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#D97706" stop-opacity="0.7" />
+            <stop offset="55%" stop-color="#FBBF24" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="#FCD34D" stop-opacity="0.95" />
+          </linearGradient>
+        </defs>
+        <path d="{{ map.path }}" fill="none" stroke="url(#routeGrad-{{ shipment.tracking_number }})" stroke-width="3" stroke-linecap="round" class="route-line" />
+      </svg>
+
+      {% for point in map.points %}
+      <div class="absolute z-10" style="left:{{ point.x_pct }}%; top:{{ point.y_pct }}%; transform:translate(-50%,-50%);">
+        {% if not point.current %}
+        <div class="w-3.5 h-3.5 rounded-full border-2
+          {% if point.kind == 'destination' and point.reached %}bg-emerald-400 border-emerald-200
+          {% elif point.reached %}bg-cargo-500 border-cargo-300/60
+          {% else %}bg-ink-900 border-white/20{% endif %}">
+        </div>
+        {% endif %}
+        <div class="absolute w-28 text-center
+            {% if point.label_below %}top-full {% if point.current %}mt-10{% else %}mt-3{% endif %}{% else %}bottom-full {% if point.current %}mb-10{% else %}mb-3{% endif %}{% endif %}
+            {% if point.is_first %}left-0{% elif point.is_last %}right-0{% else %}left-1/2{% endif %}"
+            style="{% if not point.is_first and not point.is_last %}transform:translateX(-50%);{% endif %}">
+          <p class="text-[11px] font-semibold leading-tight {% if point.reached or point.current %}text-white/85{% else %}text-white/30{% endif %}">{{ point.label }}</p>
+          <p class="text-[9px] uppercase tracking-wider font-bold mt-0.5
+            {% if point.current %}text-cargo-400{% elif point.kind == 'destination' and point.reached %}text-emerald-400{% elif point.kind == 'origin' %}text-white/25{% else %}text-white/15{% endif %}">
+            {% if point.current %}Now{% elif point.kind == 'origin' %}Origin{% elif point.kind == 'destination' %}{% if point.reached %}Delivered{% else %}Destination{% endif %}{% else %}&nbsp;{% endif %}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if map.current %}
+      <div class="absolute z-20 float-card" style="left:{{ map.current.x_pct }}%; top:{{ map.current.y_pct }}%; transform:translate(-50%,-50%);">
+        <div class="relative flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-cargo-400 to-cargo-600 shadow-xl shadow-cargo-500/40 border-2 border-ink-950">
+          <span class="absolute inset-0 rounded-full bg-cargo-400 animate-ping-slow"></span>
+          <i class="fas {{ shipment.service_type|service_icon }} relative z-10 text-ink-950 text-sm"></i>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
