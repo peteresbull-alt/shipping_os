@@ -3,14 +3,14 @@ from decimal import Decimal
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Sum
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .decorators import staff_required
 from .forms import (
-    AddressForm, AdminShipmentEditForm, AdminShipmentForm, ChangePasswordForm, ContactForm,
-    NewsletterForm, ProfileForm, RegisterForm, SupportTicketForm, TrackingEventEditForm, TrackingEventForm,
+    AddressForm, ChangePasswordForm, ContactForm,
+    NewsletterForm, ProfileForm, RegisterForm, ShipmentForm, SupportTicketForm, TrackingEventEditForm, TrackingEventForm,
 )
 from .models import (
     Address, ContactMessage, CustomUser, NewsletterSubscriber, Notification,
@@ -257,18 +257,14 @@ def shipment_detail_view(request, tracking_number):
 
 @staff_required
 def admin_dashboard_view(request):
-    shipments = Shipment.objects.select_related('user').all()
+    shipments = Shipment.objects.all()
     thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
-
-    total_revenue = shipments.filter(payment_status='PAID').aggregate(total=Sum('shipping_cost'))['total'] or Decimal('0.00')
 
     context = {
         'title': 'Admin Dashboard',
         'total_shipments': shipments.count(),
         'in_transit': shipments.filter(status__in=['PICKED_UP', 'IN_TRANSIT', 'CUSTOMS', 'OUT_FOR_DELIVERY']).count(),
         'delivered_count': shipments.filter(status='DELIVERED').count(),
-        'unpaid_count': shipments.filter(payment_status='UNPAID').count(),
-        'total_revenue': total_revenue,
         'new_this_month': shipments.filter(created_at__gte=thirty_days_ago).count(),
         'open_tickets': SupportTicket.objects.exclude(status__in=['RESOLVED', 'CLOSED']).count(),
         'new_contact_messages': ContactMessage.objects.filter(is_resolved=False).count(),
@@ -280,21 +276,16 @@ def admin_dashboard_view(request):
 
 @staff_required
 def admin_shipment_list_view(request):
-    shipments = Shipment.objects.select_related('user').all()
+    shipments = Shipment.objects.all()
 
     status = request.GET.get('status', '')
     if status:
         shipments = shipments.filter(status=status)
 
-    payment = request.GET.get('payment', '')
-    if payment:
-        shipments = shipments.filter(payment_status=payment)
-
     q = request.GET.get('q', '').strip()
     if q:
         shipments = shipments.filter(
-            Q(tracking_number__icontains=q) | Q(recipient_name__icontains=q) |
-            Q(user__email__icontains=q) | Q(user__first_name__icontains=q) | Q(user__last_name__icontains=q)
+            Q(tracking_number__icontains=q) | Q(recipient_name__icontains=q) | Q(sender_name__icontains=q)
         )
 
     return render(request, 'manage/shipment_list.html', {
@@ -302,14 +293,13 @@ def admin_shipment_list_view(request):
         'shipments': shipments,
         'status_choices': Shipment.STATUS_CHOICES,
         'selected_status': status,
-        'selected_payment': payment,
         'query': q,
     })
 
 
 @staff_required
 def admin_shipment_detail_view(request, tracking_number):
-    shipment = get_object_or_404(Shipment.objects.select_related('user'), tracking_number=tracking_number)
+    shipment = get_object_or_404(Shipment, tracking_number=tracking_number)
 
     if request.method == 'POST':
         event_form = TrackingEventForm(request.POST)
@@ -317,14 +307,15 @@ def admin_shipment_detail_view(request, tracking_number):
             event = event_form.save(commit=False)
             event.shipment = shipment
             event.save()  # syncs shipment.status/current_location automatically
-            Notification.objects.create(
-                user=shipment.user,
-                notification_type='DELIVERY' if event.status == 'DELIVERED' else 'SHIPMENT',
-                title=f'Shipment {event.get_status_display().lower()}',
-                message=f'Your shipment {shipment.tracking_number} is now "{event.get_status_display()}" ({event.location}).',
-                shipment=shipment,
-                action_url=f'/shipments/{shipment.tracking_number}/',
-            )
+            if shipment.user:
+                Notification.objects.create(
+                    user=shipment.user,
+                    notification_type='DELIVERY' if event.status == 'DELIVERED' else 'SHIPMENT',
+                    title=f'Shipment {event.get_status_display().lower()}',
+                    message=f'Your shipment {shipment.tracking_number} is now "{event.get_status_display()}" ({event.location}).',
+                    shipment=shipment,
+                    action_url=f'/shipments/{shipment.tracking_number}/',
+                )
             messages.success(request, f'Shipment {shipment.tracking_number} updated to "{event.get_status_display()}".')
             return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
     else:
@@ -341,13 +332,12 @@ def admin_shipment_detail_view(request, tracking_number):
 @staff_required
 def admin_shipment_edit_view(request, tracking_number):
     """Full edit of an existing shipment's details — package, sender,
-    recipient, payment status, estimated delivery. This is separate from
-    posting a tracking update: that changes the shipment's *stage*, this
-    corrects its *details*."""
-    shipment = get_object_or_404(Shipment.objects.select_related('user'), tracking_number=tracking_number)
+    recipient, estimated delivery. This is separate from posting a tracking
+    update: that changes the shipment's *stage*, this corrects its *details*."""
+    shipment = get_object_or_404(Shipment, tracking_number=tracking_number)
 
     if request.method == 'POST':
-        form = AdminShipmentEditForm(request.POST, instance=shipment)
+        form = ShipmentForm(request.POST, instance=shipment)
         if form.is_valid():
             shipment = form.save(commit=False)
             cost, chargeable_weight, insurance_fee = calculate_shipping_cost(
@@ -359,16 +349,12 @@ def admin_shipment_edit_view(request, tracking_number):
             messages.success(request, f'Shipment {shipment.tracking_number} updated.')
             return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
     else:
-        form = AdminShipmentEditForm(instance=shipment)
+        form = ShipmentForm(instance=shipment)
 
     return render(request, 'manage/shipment_edit.html', {
         'title': f'Edit {shipment.tracking_number}',
         'shipment': shipment,
         'form': form,
-        'rate_card': {
-            'base': SERVICE_BASE_RATE, 'per_kg': SERVICE_PER_KG, 'eta': SERVICE_ETA_DAYS,
-            'insurance_rate': float(INSURANCE_RATE) * 100,
-        },
     })
 
 
@@ -419,10 +405,9 @@ def admin_event_delete_view(request, tracking_number, event_id):
 @staff_required
 def admin_shipment_create_view(request):
     if request.method == 'POST':
-        form = AdminShipmentForm(request.POST)
+        form = ShipmentForm(request.POST)
         if form.is_valid():
             shipment = form.save(commit=False)
-            shipment.user = form.cleaned_data['customer']
 
             cost, chargeable_weight, insurance_fee = calculate_shipping_cost(
                 shipment.service_type, shipment.weight_kg, shipment.length_cm,
@@ -430,8 +415,9 @@ def admin_shipment_create_view(request):
             )
             shipment.shipping_cost = cost
             shipment.current_location = f'{shipment.sender_city}, {shipment.sender_country}'
-            eta_days = SERVICE_ETA_DAYS.get(shipment.service_type, 5)
-            shipment.estimated_delivery = (timezone.now() + timezone.timedelta(days=eta_days)).date()
+            if not shipment.estimated_delivery:
+                eta_days = SERVICE_ETA_DAYS.get(shipment.service_type, 5)
+                shipment.estimated_delivery = (timezone.now() + timezone.timedelta(days=eta_days)).date()
             shipment.save()
 
             TrackingEvent.objects.create(
@@ -440,26 +426,14 @@ def admin_shipment_create_view(request):
                 location=shipment.current_location,
                 note='Shipment booked and awaiting pickup.',
             )
-            Notification.objects.create(
-                user=shipment.user,
-                notification_type='SHIPMENT',
-                title='Shipment booked',
-                message=f'A new shipment {shipment.tracking_number} to {shipment.recipient_city} has been booked for you.',
-                shipment=shipment,
-                action_url=f'/shipments/{shipment.tracking_number}/',
-            )
-            messages.success(request, f'Shipment {shipment.tracking_number} created for {shipment.user.get_full_name}.')
+            messages.success(request, f'Shipment {shipment.tracking_number} created.')
             return redirect('admin_shipment_detail', tracking_number=shipment.tracking_number)
     else:
-        form = AdminShipmentForm()
+        form = ShipmentForm()
 
     return render(request, 'manage/shipment_create.html', {
         'title': 'Create Shipment',
         'form': form,
-        'rate_card': {
-            'base': SERVICE_BASE_RATE, 'per_kg': SERVICE_PER_KG, 'eta': SERVICE_ETA_DAYS,
-            'insurance_rate': float(INSURANCE_RATE) * 100,
-        },
     })
 
 

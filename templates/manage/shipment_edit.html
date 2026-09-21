@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
 {% block page_title %}Edit {{ shipment.tracking_number }}{% endblock %}
-{% block page_description %}Correct any detail — package, addresses, payment, delivery estimate{% endblock %}
+{% block page_description %}Correct any detail — package, addresses, delivery estimate{% endblock %}
 
 {% block content %}
-{{ rate_card|json_script:"rate-card-data" }}
-
 <div class="flex items-center gap-2 mb-6 text-sm">
   <a href="{% url 'admin_shipment_detail' shipment.tracking_number %}" class="text-white/40 hover:text-white"><i class="fas fa-arrow-left mr-1.5"></i>{{ shipment.tracking_number }}</a>
 </div>
@@ -16,164 +14,75 @@
 </div>
 {% endif %}
 
-<form method="post" class="grid lg:grid-cols-3 gap-6" id="shipmentForm">
+<form method="post" class="max-w-3xl space-y-6">
   {% csrf_token %}
-  <div class="lg:col-span-2 space-y-6">
 
-    <!-- SERVICE -->
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Service</h3>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Service Type</label>
-          {{ form.service_type }}
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Package Type</label>
-          {{ form.package_type }}
-        </div>
-      </div>
-      <div class="mt-4">
-        <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">What's inside?</label>
-        {{ form.description }}
-      </div>
-    </div>
-
-    <!-- SENDER -->
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-location-dot text-cargo-400 mr-1.5"></i>Sender</h3>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Full Name</label>{{ form.sender_name }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Phone</label>{{ form.sender_phone }}</div>
-        <div class="sm:col-span-2"><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Street Address</label>{{ form.sender_address }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">City</label>{{ form.sender_city }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Country</label>{{ form.sender_country }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Postal Code</label>{{ form.sender_postal_code }}</div>
-      </div>
-    </div>
-
-    <!-- RECIPIENT -->
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-flag-checkered text-cargo-400 mr-1.5"></i>Recipient</h3>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Full Name</label>{{ form.recipient_name }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Phone</label>{{ form.recipient_phone }}</div>
-        <div class="sm:col-span-2"><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Street Address</label>{{ form.recipient_address }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">City</label>{{ form.recipient_city }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Country</label>{{ form.recipient_country }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Postal Code</label>{{ form.recipient_postal_code }}</div>
-      </div>
-    </div>
-
-    <!-- PACKAGE -->
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-box text-cargo-400 mr-1.5"></i>Package Details</h3>
-      <div class="grid sm:grid-cols-3 gap-4 mb-4">
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Weight (kg)</label>{{ form.weight_kg }}</div>
-        <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Declared Value ($)</label>{{ form.declared_value }}</div>
-        <div></div>
-      </div>
-      <p class="text-xs font-semibold text-white/40 uppercase tracking-wide mb-2">Dimensions (cm)</p>
-      <div class="grid grid-cols-3 gap-4 mb-5">
-        <div>{{ form.length_cm }}</div>
-        <div>{{ form.width_cm }}</div>
-        <div>{{ form.height_cm }}</div>
-      </div>
-      <div class="flex flex-wrap gap-6">
-        <label class="flex items-center gap-2 text-sm text-white/60 cursor-pointer">{{ form.is_insured }}<span>Add shipping insurance</span></label>
-        <label class="flex items-center gap-2 text-sm text-white/60 cursor-pointer">{{ form.is_fragile }}<span>Fragile / handle with care</span></label>
-      </div>
-    </div>
-
-    <!-- PAYMENT & DELIVERY -->
-    <div class="glass rounded-2xl p-6 border border-cargo-500/15">
-      <h3 class="text-sm font-bold text-cargo-400 uppercase tracking-wide mb-4"><i class="fas fa-sack-dollar mr-1.5"></i>Payment &amp; Delivery</h3>
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Payment Status</label>
-          {{ form.payment_status }}
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Estimated Delivery</label>
-          {{ form.estimated_delivery }}
-        </div>
-      </div>
+  <!-- SENDER -->
+  <div class="glass rounded-2xl p-6">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-location-dot text-cargo-400 mr-1.5"></i>Sender</h3>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Full Name</label>{{ form.sender_name }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Phone</label>{{ form.sender_phone }}</div>
+      <div class="sm:col-span-2"><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Street Address</label>{{ form.sender_address }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">City</label>{{ form.sender_city }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Country</label>{{ form.sender_country }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Postal Code</label>{{ form.sender_postal_code }}</div>
     </div>
   </div>
 
-  <!-- QUOTE SIDEBAR -->
-  <div class="lg:col-span-1">
-    <div class="glass rounded-2xl p-6 lg:sticky lg:top-6">
-      <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-5">Quote Summary</h3>
-
-      <div class="space-y-3 mb-5 text-sm">
-        <div class="flex justify-between"><span class="text-white/40">Base rate</span><span class="text-white font-medium" id="qBase">$0.00</span></div>
-        <div class="flex justify-between"><span class="text-white/40">Chargeable weight</span><span class="text-white font-medium" id="qWeight">0.0 kg</span></div>
-        <div class="flex justify-between"><span class="text-white/40">Weight charge</span><span class="text-white font-medium" id="qWeightCharge">$0.00</span></div>
-        <div class="flex justify-between" id="qInsuranceRow" style="display:none;"><span class="text-white/40">Insurance</span><span class="text-white font-medium" id="qInsurance">$0.00</span></div>
-      </div>
-
-      <div class="pt-4 border-t border-white/10 flex items-center justify-between mb-6">
-        <span class="text-white/60 font-semibold">New Total</span>
-        <span class="text-3xl font-display font-bold text-cargo-gradient" id="qTotal">$0.00</span>
-      </div>
-
-      <div class="flex items-center gap-2 text-xs text-white/40 mb-6 rounded-xl bg-white/5 px-3 py-2.5">
-        <i class="fas fa-circle-info text-cargo-400"></i>
-        <span>Current price: <span class="text-white font-semibold">${{ shipment.shipping_cost }}</span></span>
-      </div>
-
-      <button type="submit" class="w-full inline-flex items-center justify-center px-6 py-3.5 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/20">
-        Save Changes <i class="fas fa-check ml-2"></i>
-      </button>
-      <p class="text-[11px] text-white/25 text-center mt-3">The price recalculates from weight, dimensions, service and insurance.</p>
+  <!-- RECIPIENT -->
+  <div class="glass rounded-2xl p-6">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-flag-checkered text-cargo-400 mr-1.5"></i>Recipient</h3>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Full Name</label>{{ form.recipient_name }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Phone</label>{{ form.recipient_phone }}</div>
+      <div class="sm:col-span-2"><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Street Address</label>{{ form.recipient_address }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">City</label>{{ form.recipient_city }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Country</label>{{ form.recipient_country }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Postal Code</label>{{ form.recipient_postal_code }}</div>
     </div>
   </div>
+
+  <!-- SERVICE -->
+  <div class="glass rounded-2xl p-6">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Service</h3>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Service Type</label>
+        {{ form.service_type }}
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Package Type</label>
+        {{ form.package_type }}
+      </div>
+    </div>
+    <div class="mt-4">
+      <label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">What's inside?</label>
+      {{ form.description }}
+    </div>
+  </div>
+
+  <!-- PACKAGE -->
+  <div class="glass rounded-2xl p-6">
+    <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4"><i class="fas fa-box text-cargo-400 mr-1.5"></i>Package Details</h3>
+    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Weight (kg)</label>{{ form.weight_kg }}</div>
+      <div><label class="block text-xs font-semibold text-white/50 uppercase tracking-wide mb-2">Expected Delivery <span class="text-white/25 normal-case">(optional)</span></label>{{ form.estimated_delivery }}</div>
+    </div>
+    <p class="text-xs font-semibold text-white/40 uppercase tracking-wide mb-2">Dimensions (cm)</p>
+    <div class="grid grid-cols-3 gap-4 mb-5">
+      <div>{{ form.length_cm }}</div>
+      <div>{{ form.width_cm }}</div>
+      <div>{{ form.height_cm }}</div>
+    </div>
+    <div class="flex flex-wrap gap-6">
+      <label class="flex items-center gap-2 text-sm text-white/60 cursor-pointer">{{ form.is_insured }}<span>Add shipping insurance</span></label>
+      <label class="flex items-center gap-2 text-sm text-white/60 cursor-pointer">{{ form.is_fragile }}<span>Fragile / handle with care</span></label>
+    </div>
+  </div>
+
+  <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 text-sm font-bold rounded-xl text-ink-950 bg-gradient-to-r from-cargo-400 to-cargo-500 hover:from-cargo-300 hover:to-cargo-400 transition-all shadow-lg shadow-cargo-500/20">
+    Save Changes <i class="fas fa-check ml-2"></i>
+  </button>
 </form>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-  const RATE_CARD = JSON.parse(document.getElementById('rate-card-data').textContent);
-
-  function byId(id) { return document.getElementById(id); }
-  function fieldByName(name) { return document.querySelector(`[name="${name}"]`); }
-
-  function calculateQuote() {
-    const service = fieldByName('service_type').value;
-    const weight = parseFloat(fieldByName('weight_kg').value) || 0;
-    const l = parseFloat(fieldByName('length_cm').value) || 10;
-    const w = parseFloat(fieldByName('width_cm').value) || 10;
-    const h = parseFloat(fieldByName('height_cm').value) || 10;
-    const declaredValue = parseFloat(fieldByName('declared_value').value) || 0;
-    const insured = fieldByName('is_insured').checked;
-
-    const volumetric = (l * w * h) / 5000;
-    const chargeable = Math.max(weight, volumetric);
-
-    const base = RATE_CARD.base[service] ?? 14.0;
-    const perKg = RATE_CARD.per_kg[service] ?? 2.6;
-
-    const weightCharge = perKg * chargeable;
-    let insuranceFee = 0;
-    if (insured && declaredValue) {
-      insuranceFee = declaredValue * (RATE_CARD.insurance_rate / 100);
-    }
-    const total = base + weightCharge + insuranceFee;
-
-    byId('qBase').textContent = `$${base.toFixed(2)}`;
-    byId('qWeight').textContent = `${chargeable.toFixed(2)} kg`;
-    byId('qWeightCharge').textContent = `$${weightCharge.toFixed(2)}`;
-    byId('qInsuranceRow').style.display = insured ? 'flex' : 'none';
-    byId('qInsurance').textContent = `$${insuranceFee.toFixed(2)}`;
-    byId('qTotal').textContent = `$${total.toFixed(2)}`;
-  }
-
-  ['service_type', 'weight_kg', 'length_cm', 'width_cm', 'height_cm', 'declared_value', 'is_insured'].forEach((name) => {
-    const el = fieldByName(name);
-    if (el) el.addEventListener('input', calculateQuote);
-    if (el) el.addEventListener('change', calculateQuote);
-  });
-  calculateQuote();
-</script>
 {% endblock %}

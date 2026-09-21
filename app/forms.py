@@ -81,12 +81,15 @@ class AddressForm(forms.ModelForm):
 
 
 class ShipmentForm(forms.ModelForm):
+    """Records what's being shipped and where — no monetary fields at all;
+    pricing/payment stay off every admin and customer screen."""
+
     class Meta:
         model = Shipment
         fields = [
             'service_type', 'package_type', 'description',
-            'weight_kg', 'length_cm', 'width_cm', 'height_cm', 'declared_value',
-            'is_insured', 'is_fragile',
+            'weight_kg', 'length_cm', 'width_cm', 'height_cm',
+            'is_insured', 'is_fragile', 'estimated_delivery',
             'sender_name', 'sender_phone', 'sender_address', 'sender_city', 'sender_country', 'sender_postal_code',
             'recipient_name', 'recipient_phone', 'recipient_address', 'recipient_city', 'recipient_country', 'recipient_postal_code',
         ]
@@ -94,11 +97,11 @@ class ShipmentForm(forms.ModelForm):
             'service_type': forms.Select(attrs={'class': SELECT}),
             'package_type': forms.Select(attrs={'class': SELECT}),
             'description': forms.TextInput(attrs={'class': INPUT, 'placeholder': "What's inside? (e.g. Electronics, Documents)"}),
+            'estimated_delivery': forms.DateInput(attrs={'class': INPUT, 'type': 'date'}),
             'weight_kg': forms.NumberInput(attrs={'class': INPUT, 'step': '0.1', 'placeholder': '0.0'}),
             'length_cm': forms.NumberInput(attrs={'class': INPUT, 'step': '0.1', 'placeholder': '10'}),
             'width_cm': forms.NumberInput(attrs={'class': INPUT, 'step': '0.1', 'placeholder': '10'}),
             'height_cm': forms.NumberInput(attrs={'class': INPUT, 'step': '0.1', 'placeholder': '10'}),
-            'declared_value': forms.NumberInput(attrs={'class': INPUT, 'step': '0.01', 'placeholder': '0.00'}),
             'is_insured': forms.CheckboxInput(attrs={'class': CHECKBOX}),
             'is_fragile': forms.CheckboxInput(attrs={'class': CHECKBOX}),
 
@@ -115,37 +118,6 @@ class ShipmentForm(forms.ModelForm):
             'recipient_city': forms.TextInput(attrs={'class': INPUT, 'placeholder': 'City'}),
             'recipient_country': forms.TextInput(attrs={'class': INPUT, 'placeholder': 'Country'}),
             'recipient_postal_code': forms.TextInput(attrs={'class': INPUT, 'placeholder': 'Postal code'}),
-        }
-
-
-class CustomerChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return f'{obj.get_full_name} — {obj.email}'
-
-
-class AdminShipmentForm(ShipmentForm):
-    """Staff-only: books a shipment on behalf of a chosen customer."""
-
-    customer = CustomerChoiceField(
-        queryset=CustomUser.objects.filter(is_staff=False).order_by('first_name', 'last_name'),
-        widget=forms.Select(attrs={'class': SELECT}),
-        label='Customer',
-        empty_label='Select a customer…',
-    )
-
-
-class AdminShipmentEditForm(ShipmentForm):
-    """Staff-only: full edit of an existing shipment's details — everything
-    except who it belongs to and its tracking number. Payment status and
-    estimated delivery are editable here too, on top of the package/sender/
-    recipient fields ShipmentForm already covers."""
-
-    class Meta(ShipmentForm.Meta):
-        fields = ShipmentForm.Meta.fields + ['payment_status', 'estimated_delivery']
-        widgets = {
-            **ShipmentForm.Meta.widgets,
-            'payment_status': forms.Select(attrs={'class': SELECT}),
-            'estimated_delivery': forms.DateInput(attrs={'class': INPUT, 'type': 'date'}),
         }
 
 

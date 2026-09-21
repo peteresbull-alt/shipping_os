@@ -2,7 +2,7 @@
 {% load shipping_extras %}
 
 {% block page_title %}{{ shipment.tracking_number }}{% endblock %}
-{% block page_description %}Booked {{ shipment.created_at|date:"M d, Y" }} for {{ shipment.user.get_full_name }}{% endblock %}
+{% block page_description %}Booked {{ shipment.created_at|date:"M d, Y" }}{% endblock %}
 
 {% block content %}
 <div>
@@ -54,7 +54,7 @@
       <!-- UPDATE STATUS -->
       <div class="glass rounded-2xl p-6 lg:p-8 border border-cargo-500/15">
         <h3 class="text-sm font-bold text-cargo-400 uppercase tracking-wide mb-1"><i class="fas fa-pen-to-square mr-1.5"></i>Post a Tracking Update</h3>
-        <p class="text-xs text-white/35 mb-5">This becomes the shipment's new status and location, and the customer is notified automatically.</p>
+        <p class="text-xs text-white/35 mb-5">This becomes the shipment's new status and location on the public tracking page.</p>
         <form method="post" class="grid sm:grid-cols-3 gap-4">
           {% csrf_token %}
           <div>
@@ -110,40 +110,13 @@
       </div>
 
       <div class="glass rounded-2xl p-6">
-        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Customer</h3>
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold text-ink-950 bg-gradient-to-br from-cargo-400 to-cargo-600 flex-shrink-0">{{ shipment.user.initials }}</div>
-          <div class="min-w-0">
-            <p class="font-semibold text-white text-sm truncate">{{ shipment.user.get_full_name }}</p>
-            <p class="text-xs text-white/40 truncate">{{ shipment.user.email }}</p>
-          </div>
-        </div>
-        <dl class="space-y-2 text-sm">
-          <div class="flex justify-between"><dt class="text-white/40">Customer ID</dt><dd class="text-white font-medium font-mono">{{ shipment.user.customer_id }}</dd></div>
-          <div class="flex justify-between"><dt class="text-white/40">Phone</dt><dd class="text-white font-medium">{{ shipment.user.phone_number|default:"—" }}</dd></div>
-        </dl>
-      </div>
-
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Payment</h3>
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-white/50 text-sm">Shipping Cost</span>
-          <span class="text-2xl font-display font-bold text-white">${{ shipment.shipping_cost }}</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-white/50 text-sm">Status</span>
-          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border {{ shipment.payment_status|status_badge }}">{{ shipment.get_payment_status_display }}</span>
-        </div>
-      </div>
-
-      <div class="glass rounded-2xl p-6">
         <h3 class="text-sm font-bold text-white/50 uppercase tracking-wide mb-4">Package Details</h3>
         <dl class="space-y-3 text-sm">
           <div class="flex justify-between"><dt class="text-white/40">Service</dt><dd class="text-white font-medium">{{ shipment.get_service_type_display }}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Type</dt><dd class="text-white font-medium">{{ shipment.get_package_type_display }}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Weight</dt><dd class="text-white font-medium">{{ shipment.weight_kg }} kg</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Dimensions</dt><dd class="text-white font-medium">{{ shipment.length_cm }}&times;{{ shipment.width_cm }}&times;{{ shipment.height_cm }} cm</dd></div>
-          <div class="flex justify-between"><dt class="text-white/40">Declared Value</dt><dd class="text-white font-medium">${{ shipment.declared_value }}</dd></div>
+          {% if shipment.estimated_delivery %}<div class="flex justify-between"><dt class="text-white/40">Expected Delivery</dt><dd class="text-white font-medium">{{ shipment.estimated_delivery|date:"M d, Y" }}</dd></div>{% endif %}
           <div class="flex justify-between"><dt class="text-white/40">Insured</dt><dd class="text-white font-medium">{% if shipment.is_insured %}<i class="fas fa-circle-check text-emerald-400"></i>{% else %}<i class="fas fa-circle-xmark text-white/25"></i>{% endif %}</dd></div>
           <div class="flex justify-between"><dt class="text-white/40">Fragile</dt><dd class="text-white font-medium">{% if shipment.is_fragile %}<i class="fas fa-circle-check text-amber-400"></i>{% else %}<i class="fas fa-circle-xmark text-white/25"></i>{% endif %}</dd></div>
           {% if shipment.description %}<div class="flex justify-between gap-4"><dt class="text-white/40 flex-shrink-0">Contents</dt><dd class="text-white font-medium text-right">{{ shipment.description }}</dd></div>{% endif %}

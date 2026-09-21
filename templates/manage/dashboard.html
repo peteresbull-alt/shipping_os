@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load shipping_extras %}
-{% load humanize %}
 
 {% block page_description %}Global overview across every customer{% endblock %}
 
@@ -31,24 +30,20 @@
       <h3 class="text-2xl lg:text-3xl font-display font-bold text-white">{{ delivered_count }}</h3>
     </div>
     <div class="rounded-2xl p-5 lg:p-6 glass">
-      <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center mb-4"><i class="fas fa-sack-dollar text-violet-400"></i></div>
-      <p class="text-xs font-semibold text-white/40 mb-1">Total Revenue</p>
-      <h3 class="text-xl lg:text-2xl font-display font-bold text-white">${{ total_revenue|floatformat:2|intcomma }}</h3>
+      <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center mb-4"><i class="fas fa-calendar-plus text-violet-400"></i></div>
+      <p class="text-xs font-semibold text-white/40 mb-1">Booked This Month</p>
+      <h3 class="text-2xl lg:text-3xl font-display font-bold text-white">{{ new_this_month }}</h3>
     </div>
   </div>
 
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    <div class="rounded-2xl p-5 glass">
-      <p class="text-xs font-semibold text-white/40 mb-1">Unpaid Invoices</p>
-      <h3 class="text-xl font-display font-bold text-white">{{ unpaid_count }}</h3>
-    </div>
-    <div class="rounded-2xl p-5 glass">
-      <p class="text-xs font-semibold text-white/40 mb-1">Booked This Month</p>
-      <h3 class="text-xl font-display font-bold text-white">{{ new_this_month }}</h3>
-    </div>
+  <div class="grid grid-cols-3 gap-4 mb-8">
     <div class="rounded-2xl p-5 glass">
       <p class="text-xs font-semibold text-white/40 mb-1">Open Support Tickets</p>
       <h3 class="text-xl font-display font-bold text-white">{{ open_tickets }}</h3>
+    </div>
+    <div class="rounded-2xl p-5 glass">
+      <p class="text-xs font-semibold text-white/40 mb-1">New Contact Messages</p>
+      <h3 class="text-xl font-display font-bold text-white">{{ new_contact_messages }}</h3>
     </div>
     <div class="rounded-2xl p-5 glass">
       <p class="text-xs font-semibold text-white/40 mb-1">Total Customers</p>
@@ -68,9 +63,9 @@
         <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-sky-500/20 to-sky-700/10 group-hover:scale-110 transition-transform"><i class="fas fa-boxes-stacked text-sky-400"></i></div>
         <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">All Shipments</span>
       </a>
-      <a href="{% url 'admin_shipment_list' %}?payment=UNPAID" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
-        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-violet-500/20 to-violet-700/10 group-hover:scale-110 transition-transform"><i class="fas fa-sack-dollar text-violet-400"></i></div>
-        <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">Unpaid Invoices</span>
+      <a href="{% url 'support_ticket_list' %}" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-violet-500/20 to-violet-700/10 group-hover:scale-110 transition-transform"><i class="fas fa-headset text-violet-400"></i></div>
+        <span class="text-xs font-semibold text-white/70 group-hover:text-white text-center">Support Tickets</span>
       </a>
       <a href="/admin/" class="group flex flex-col items-center p-4 rounded-xl hover:bg-white/5 transition-all">
         <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2.5 bg-gradient-to-br from-white/10 to-white/5 group-hover:scale-110 transition-transform"><i class="fas fa-gears text-white/60"></i></div>
@@ -92,10 +87,9 @@
         <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-cargo-500/20 to-cargo-700/10"><i class="fas {{ shipment.service_type|service_icon }} text-cargo-400"></i></div>
         <div class="flex-1 min-w-0">
           <p class="font-semibold text-white text-sm font-mono truncate">{{ shipment.tracking_number }}</p>
-          <p class="text-xs text-white/40 truncate">{{ shipment.user.get_full_name }} &middot; {{ shipment.recipient_city }}, {{ shipment.recipient_country }}</p>
+          <p class="text-xs text-white/40 truncate">{{ shipment.recipient_city }}, {{ shipment.recipient_country }}</p>
         </div>
         <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border flex-shrink-0 {{ shipment.status|status_badge }}">{{ shipment.get_status_display }}</span>
-        <span class="text-sm font-bold text-white flex-shrink-0 hidden sm:block">${{ shipment.shipping_cost }}</span>
       </a>
       {% endfor %}
       {% else %}

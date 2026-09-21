@@ -39,8 +39,8 @@ class TrackingEventInline(admin.TabularInline):
 
 @admin.register(Shipment)
 class ShipmentAdmin(admin.ModelAdmin):
-    list_display = ('tracking_number', 'user', 'service_type', 'status', 'payment_status', 'shipping_cost', 'created_at')
-    list_filter = ('status', 'service_type', 'payment_status')
+    list_display = ('tracking_number', 'user', 'service_type', 'status', 'created_at')
+    list_filter = ('status', 'service_type')
     search_fields = ('tracking_number', 'user__email', 'recipient_name', 'sender_name')
     inlines = [TrackingEventInline]
     readonly_fields = ('tracking_number', 'created_at', 'updated_at')

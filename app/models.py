@@ -170,7 +170,7 @@ class Shipment(models.Model):
     ]
 
     tracking_number = models.CharField(max_length=20, unique=True, db_index=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shipments')
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='shipments')
 
     service_type = models.CharField(max_length=20, choices=SERVICE_TYPES, default='STANDARD')
     package_type = models.CharField(max_length=20, choices=PACKAGE_TYPES, default='PARCEL')
